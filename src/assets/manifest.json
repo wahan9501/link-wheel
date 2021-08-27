@@ -3,16 +3,36 @@
   "description": "Dota2 chat wheel like wheel for open quick access links",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["activeTab", "scripting", "bookmarks", "storage", "tabs"],
-  "host_permissions": ["*://*/*", "chrome://*/*"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "bookmarks",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {},
   "web_accessible_resources": [
     {
-      "resources": ["/*.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "/*.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
-  ]
+  ],
+  "commands": {
+    "openWheel": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "Dota2 chat wheel like wheel for open quick access links"
+    }
+  }
 }

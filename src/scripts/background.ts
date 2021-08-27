@@ -223,17 +223,12 @@ function reddenPage() {
               if (sel) {
                 // if (sel_id > 0 && sel_id < 8 && items[sel_id] && )
 
-                if (items[sel_id]?.url)
-                  window.open(items[sel_id].url, "_blank");
+                if (items[sel_id]?.url) window.open(items[sel_id].url, "_blank");
               }
               document.removeEventListener("mousemove", updatePosition, false);
             }
           }
-          document.addEventListener(
-            "pointerlockchange",
-            lockChangeAlert,
-            false
-          );
+          document.addEventListener("pointerlockchange", lockChangeAlert, false);
         }
 
         function init() {
@@ -268,24 +263,99 @@ chrome.action.onClicked.addListener((tab) => {
 //     function: reddenPage,
 //   });
 // });
+function injectWheelIframe() {
+  fetch(chrome.runtime.getURL("/wheelIframe.html"))
+    .then((r) => r.text())
+    .then((html) => {
+      if (!document.getElementById("wheel-iframe")) {
+        document.body.insertAdjacentHTML("beforebegin", html);
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  //code in here will run every time a user goes onto a new tab, so you can insert your scripts into every new tab
-  // tab.
-  // reddenPage();
+        // TODO find by position
+        const iframeEle = document.getElementById("wheel-iframe") as HTMLIFrameElement;
+        iframeEle.src = chrome.runtime.getURL("wheel.html");
+        // iframeEle.onfocus = () => console.log("focused");
+        // iframeEle.onblur = () => console.log("lose focused");
 
-  // console.log(JSON.stringify(changeInfo));
-  if (changeInfo.status === "loading") {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: reddenPage,
+        // document.addEventListener(
+        //   "keydown",
+        //   (event) => {
+        //     console.log("toptop >> key down");
+        //     if (event.altKey && event.key === "s") {
+        //       console.log(">> ", iframeEle.style.display);
+        //       // if (iframeEle.style.display === "none" || !iframeEle.style.display) {
+        //       iframeEle.style.display = "flex";
+        //       iframeEle.focus();
+        //       // }
+        //     }
+        //   },
+        //   true
+        // );
+
+        document.addEventListener("keyup", (event) => {
+          if (event.key === "Alt" || event.key === "s") {
+            console.log("top >> key up");
+            // if (iframeEle.style.display === "flex") {
+            iframeEle.style.display = "none";
+            // iframeEle.focus();
+            // }
+          }
+        });
+
+        document.addEventListener("message", (event) => {
+          if ((event as MessageEvent).data === "exit") {
+            console.log("top >> key up");
+            iframeEle.style.display = "none";
+            // iframeEle.focus();
+          }
+        });
+      }
+
+      const iframeEle = document.getElementById("wheel-iframe") as HTMLIFrameElement;
+      iframeEle.style.display = "flex";
+      iframeEle.focus();
+      // iframeEle.contentWindow.disp(new KeyboardEvent("keydown", { key: "s", altKey: true }));
+      iframeEle.contentWindow.postMessage("start", "*");
+
+      // document.body.insertAdjacentHTML("beforebegin", html);
     });
+}
 
-    // chrome.scripting.executeScript({
-    //   target: { tabId: tab.id },
-    //   file: "wheel.js",
-    // });
-  }
-});
+// chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+//   //code in here will run every time a user goes onto a new tab, so you can insert your scripts into every new tab
+//   // tab.
+//   // reddenPage();
+
+//   // console.log(JSON.stringify(changeInfo));
+//   if (changeInfo.status === "loading") {
+//     chrome.scripting.executeScript({
+//       target: { tabId: tab.id },
+//       func: injectWheelIframe,
+//       // func: reddenPage,
+//     });
+
+//     // chrome.scripting.executeScript({
+//     //   target: { tabId: tab.id },
+//     //   file: "wheel.js",
+//     // });
+//   }
+// });
 
 // chrome://flags/#extensions-on-chrome-urls
+
+chrome.commands.onCommand.addListener((command) => {
+  // command will be "flip-tabs-forward" or "flip-tabs-backwards"
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    // Sort tabs according to their index in the window.
+
+    if (command === "openWheel") {
+      console.log("command recv");
+      const activeTab = tabs[0];
+      chrome.scripting.executeScript({
+        target: { tabId: activeTab.id },
+        func: injectWheelIframe,
+        // func: reddenPage,
+      });
+    }
+  });
+});

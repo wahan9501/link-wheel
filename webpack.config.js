@@ -6,6 +6,7 @@ module.exports = {
   mode: "development",
   entry: {
     background: "./src/scripts/background.ts",
+    wheel: "./src/pages/wheel/wheel.ts",
     wheelSettings: "./src/pages/wheelSettings/wheelSettings.ts",
   },
   output: {
@@ -21,8 +22,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/pages/wheel/wheel.html",
+      template: "src/pages/wheel/wheelIframe.html",
       chunks: [],
+      filename: "wheelIframe.html",
+    }),
+    new HtmlWebpackPlugin({
+      template: "src/pages/wheel/wheel.html",
+      chunks: ["wheel"],
       filename: "wheel.html",
     }),
     new HtmlWebpackPlugin({
