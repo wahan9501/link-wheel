@@ -7,6 +7,7 @@ module.exports = {
   mode: "development",
   entry: {
     background: "./src/scripts/background.ts",
+    wheel: "./src/pages/wheel/wheel.ts",
     wheelSettings: "./src/pages/wheelSettings/wheelSettings.ts",
   },
   output: {
@@ -21,6 +22,7 @@ module.exports = {
     static: "./",
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "src/pages/wheel/wheel.html",
       chunks: [],
@@ -36,7 +38,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"],
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
