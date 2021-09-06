@@ -21,9 +21,72 @@
   /* Black w/ opacity */
 }
 
-canvas {
-  /* width: 320px;
-      height: 320px; */
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: #1c1d20;
+  background-color: aquamarine;
+}
+
+.wheel-settings-panel {
+  display: flex;
+  position: relative;
   margin: auto;
-  /* display: none; */
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.wheel-settings-panel div {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.rect1 {
+  width: 100px;
+  height: 100px;
+  background-color: #59595a;
+}
+
+.rect2 {
+  width: 100px;
+  height: 100px;
+  background-color: #59595a;
+  transform: rotate(45deg);
+}
+
+.circle1 {
+  background-color: #1c1d20;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+}
+
+.circle2 {
+  background-color: #424243;
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 2px 0px #59595a;
+}
+
+.circle3 {
+  background-color: #1c1d20;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 2px 0px #59595a;
+}
+
+.pointer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
 }
