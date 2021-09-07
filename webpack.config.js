@@ -68,22 +68,13 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /\.css$/i,
-      //   use: ["style-loader", "css-loader"],
-      // },
       {
         test: /\.html$/i,
         loader: "html-loader",
       },
       {
         test: /\.svg$/i,
-        type: "asset/source",
-      },
-      // {
-      //   test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/,
-      //   type: "asset",
-      // },
-    ],
+        type: "asset",
+      }
   },
 };
