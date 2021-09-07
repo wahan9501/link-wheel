@@ -1,32 +1,113 @@
 <style>
+  /* body {
+    margin: 0;
+    background-color: #222222;
+    background: repeating-linear-gradient(
+      45deg,
+      #2b2b2b 0%,
+      #2b2b2b 10%,
+      #222222 0%,
+      #222222 50%
+    )
+    0 / 15px 15px;
+  } */
+
   #wheel-container {
     display: none;
-    /* Hidden by default */
     position: fixed;
-    /* Stay in place */
     z-index: 9999;
-    /* Sit on top */
-    /* padding-top: 100px; */
-    /* Location of the box */
     left: 0;
     top: 0;
     width: 100%;
-    /* Full width */
     height: 100%;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
+    overflow: hidden;
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(43, 43, 43, 0.8) 0%,
+        rgba(43, 43, 43, 0.8) 10%,
+        rgba(34, 34, 34, 0.8) 0%,
+        rgba(34, 34, 34, 0.8) 50%
+      )
+      0 / 15px 15px;
   }
 
   canvas {
     margin: auto;
+    visibility: hidden;
+  }
+
+  /* Wheel Pointer */
+  .wheel-pointer {
+    position: fixed;
+    background-color: #3e3e3e;
+    border-radius: 50%;
+  }
+
+  /* Wheel Panel */
+  .wheel-panel {
+    position: fixed;
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .wheel-panel-light {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 4px 0 rgba(0, 171, 242, 0.8) inset;
+  }
+
+  /* Wheel Arrow */
+  .wheel-arrow {
+    position: fixed;
+    background-color: rgba(0, 171, 242);
+    transform-origin: bottom left;
+  }
+
+  /* Wheel Item */
+  .wheel-item {
+    position: fixed;
+    width: 32em;
+  }
+
+  .wheel-item-text {
+    text-decoration: none;
+
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    padding: 1em;
+    word-break: break-word;
+    text-align: center;
+
+    /* font-size: 2em; */
+    line-height: 1em;
+    color: #228dff;
+    font-family: Iceland;
+
+    transition: all 0.5s;
+  }
+
+  .wheel-item-text-selected {
+    color: #ffffff;
+    animation: neon2 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes neon2 {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
+        0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
+    }
+    to {
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff,
+        0 0 35px #228dff, 0 0 40px #228dff, 0 0 50px #228dff, 0 0 75px #228dff;
+    }
   }
 </style>
 
 <div id="wheel-container">
-  <canvas id="tutorial" width="480" height="480"></canvas>
+  <canvas class="wheel-canvas" width="0" height="0"></canvas>
 </div>

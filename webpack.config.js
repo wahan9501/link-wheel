@@ -2,11 +2,14 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "development",
   entry: {
     background: "./src/scripts/background.ts",
+    wheel: "./src/pages/wheel/wheel.ts",
+    wheelDev: "./src/pages/wheelDev/wheelDev.ts",
     wheelSettings: "./src/pages/wheelSettings/wheelSettings.ts",
   },
   output: {
@@ -21,6 +24,14 @@ module.exports = {
     static: "./",
   },
   plugins: [
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin({
+      template: "src/pages/wheelDev/wheelDev.html",
+      inject: "head",
+      chunks: ["wheelDev"],
+      filename: "wheelDev.html",
+    }),
     new HtmlWebpackPlugin({
       template: "src/pages/wheel/wheel.html",
       chunks: [],
@@ -36,7 +47,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"],
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
@@ -47,16 +58,32 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        oneOf: [
+          {
+            test: /wheelDev\.css/i,
+            use: [MiniCssExtractPlugin.loader, "css-loader"],
+          },
+          {
+            use: ["style-loader", "css-loader"],
+          },
+        ],
       },
+      // {
+      //   test: /\.css$/i,
+      //   use: ["style-loader", "css-loader"],
+      // },
       {
         test: /\.html$/i,
         loader: "html-loader",
       },
-      //   {
-      //     test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/,
-      //     type: "asset",
-      //   },
+      {
+        test: /\.svg$/i,
+        type: "asset/source",
+      },
+      // {
+      //   test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/,
+      //   type: "asset",
+      // },
     ],
   },
 };

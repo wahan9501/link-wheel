@@ -1,10 +1,10 @@
-import wheelHtml from "./wheel.html";
+import "./wheelDev.css";
 
 const SEL_RANGE = 50;
 const POINTER_R = 20;
 const PANEL_R = 80;
 const ARROW_OFFSET = 40;
-const ITEM_DIST = 160;
+const ITEM_DIST = 200;
 
 let containerEle;
 let canvasEle;
@@ -71,13 +71,13 @@ function drawWheelItems() {
     e.style.transform = `translate(${x}px, ${y}px)`;
 
     e.firstChild.className = "wheel-item-text";
-    e.firstChild.style.fontSize = "2rem";
+    e.firstChild.style.fontSize = "3rem";
   });
 
   if (sel) {
     wheelItemEles[sel_id].firstChild.className =
       "wheel-item-text wheel-item-text-selected";
-    wheelItemEles[sel_id].firstChild.style.fontSize = "3rem";
+    wheelItemEles[sel_id].firstChild.style.fontSize = "4rem";
   }
 }
 
@@ -126,11 +126,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.altKey && event.key === "s") {
-        if (containerEle.style.display === "none") {
-          reset();
-          draw();
-        }
+      if (event.altKey && event.key === "z") {
         containerEle.style.display = "flex";
         canvasEle.requestPointerLock();
       }
@@ -141,8 +137,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keyup",
     (event) => {
-      if (event.key === "Alt" || event.key === "s") {
-        containerEle.style.display = "none";
+      if (event.key === "Alt" || event.key === "z") {
         document.exitPointerLock();
       }
     },
@@ -222,8 +217,8 @@ function initArrow() {
   containerEle.appendChild(arrowEle);
 }
 
-function initWheelItems(items) {
-  wheelItems = items ?? new Array(8);
+function initWheelItems() {
+  wheelItems = new Array(8);
 
   for (let i = 0; i < 8; i++) {
     let wheelItemText = document.createElement("div");
@@ -255,38 +250,22 @@ function initWheelItems(items) {
   }
 }
 
-function init(wheelItems) {
-  if (!document.getElementById("wheel-container")) {
-    document.body.insertAdjacentHTML("beforebegin", wheelHtml);
-    containerEle = document.getElementById("wheel-container");
-    canvasEle = document.querySelector("canvas.wheel-canvas");
+function init() {
+  containerEle = document.getElementById("wheel-container");
+  canvasEle = document.querySelector("canvas.wheel-canvas");
 
-    // TODO remove listener?
-    addKeyboardListener();
-    addMouseListener();
-    addResizeListener();
+  addKeyboardListener();
+  addMouseListener();
+  addResizeListener();
 
-    updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
+  updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
 
-    initWheelItems(wheelItems);
-    initPanel();
-    initPointer();
-    initArrow();
+  initWheelItems();
+  initPanel();
+  initPointer();
+  initArrow();
 
-    draw();
-  }
+  draw();
 }
 
-const key = "wheelItems";
-chrome.storage.local.get(key, (result) => {
-  let items;
-  if (result && result[key]) {
-    items = result[key];
-  } else {
-    items = new Array(8);
-  }
-
-  console.log(">>>>", result, items);
-
-  init(items);
-});
+init();
