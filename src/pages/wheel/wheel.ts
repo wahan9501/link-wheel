@@ -1,10 +1,12 @@
 import wheelHtml from "./wheel.html";
 
-const SEL_RANGE = 50;
-const POINTER_R = 20;
-const PANEL_R = 80;
-const ARROW_OFFSET = 40;
-const ITEM_DIST = 160;
+const SEL_RANGE = 55;
+const POINTER_R = 30;
+const PANEL_R = 120;
+const ARROW_OFFSET = 100;
+const ITEM_DIST = 200;
+const SEL_LIGHT_R = 100;
+const SEL_LIGHT_OFFSET = 80;
 
 let containerEle;
 let canvasEle;
@@ -36,27 +38,42 @@ function reset() {
 function drawPanel() {
   panelEle.style.transform = `translate(${CX - PANEL_R}px, ${CY - PANEL_R}px)`;
   if (sel) {
-    panelLightEle.style.transform = `rotate(${m_angle}deg)`;
-    panelLightEle.style.display = "block";
+    panelEle.style.opacity = "1.0";
   } else {
-    panelLightEle.style.display = "none";
+    panelEle.style.opacity = "0.8";
   }
 }
 
 function drawPointer() {
+  console.log(SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180)));
   pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${
     CY + my - POINTER_R
   }px)`;
-  if (sel) pointerEle.style.opacity = "0.85";
-  else pointerEle.style.opacity = "0.5";
+  if (sel) {
+    pointerEle.style.opacity = "1.0";
+    panelLightEle.style.transform = `translate(${
+      CX -
+      SEL_LIGHT_R / 2 +
+      SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180))
+    }px, ${
+      CY -
+      SEL_LIGHT_R / 2 -
+      SEL_LIGHT_OFFSET * Math.cos(sel_id * 45 * (Math.PI / 180))
+    }px)`;
+    panelLightEle.style.display = "block";
+  } else {
+    pointerEle.style.opacity = "0.8";
+    panelLightEle.style.display = "none";
+  }
 }
 
 function drawArrow() {
+  arrowEle.style.transformOrigin = `50% ${ARROW_OFFSET + PANEL_R / 4}px`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${
+    CY - PANEL_R / 4 - ARROW_OFFSET
+  }px) rotate(${sel_id * 45}deg)`;
+
   if (sel) {
-    arrowEle.style.transform = `rotate(-45deg)`;
-    arrowEle.style.transform = `translate(${CX}px, ${CY - PANEL_R}px) rotate(${
-      m_angle - 45
-    }deg) translate(${-5}px, ${5}px)`;
     arrowEle.style.display = "block";
   } else {
     arrowEle.style.display = "none";
@@ -71,13 +88,11 @@ function drawWheelItems() {
     e.style.transform = `translate(${x}px, ${y}px)`;
 
     e.firstChild.className = "wheel-item-text";
-    e.firstChild.style.fontSize = "2rem";
   });
 
   if (sel) {
     wheelItemEles[sel_id].firstChild.className =
       "wheel-item-text wheel-item-text-selected";
-    wheelItemEles[sel_id].firstChild.style.fontSize = "3rem";
   }
 }
 
@@ -102,7 +117,7 @@ function updatePosition(e) {
   my += e.movementY;
   let mag = Math.sqrt(mx * mx + my * my);
 
-  const clamp = PANEL_R - POINTER_R;
+  const clamp = PANEL_R - POINTER_R * 2;
   if (mag > clamp) {
     mx *= clamp / mag;
     my *= clamp / mag;
@@ -126,7 +141,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.altKey && event.key === "s") {
+      if (event.altKey && (event.key === "s" || event.key === "S")) {
         if (containerEle.style.display === "none") {
           reset();
           draw();
@@ -141,7 +156,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keyup",
     (event) => {
-      if (event.key === "Alt" || event.key === "s") {
+      if (event.key === "Alt" || event.key === "s" || event.key === "S") {
         containerEle.style.display = "none";
         document.exitPointerLock();
       }
@@ -181,45 +196,31 @@ function addResizeListener() {
 }
 
 function initPanel() {
-  panelLightEle = document.createElement("div");
-  panelLightEle.className = "wheel-panel-light";
-  panelLightEle.style.width = `${PANEL_R * 2}px`;
-  panelLightEle.style.height = `${PANEL_R * 2}px`;
-  panelLightEle.style.display = "none";
-
-  panelEle = document.createElement("div");
-  panelEle.className = "wheel-panel";
+  panelEle = document.getElementById("wheel-panel");
   panelEle.style.width = `${PANEL_R * 2}px`;
   panelEle.style.height = `${PANEL_R * 2}px`;
   panelEle.style.transform = `translate(${CX - PANEL_R}px, ${CY - PANEL_R}px)`;
-  panelEle.appendChild(panelLightEle);
-
-  panelEle.appendChild(panelLightEle);
-  containerEle.appendChild(panelEle);
 }
 
 function initPointer() {
-  pointerEle = document.createElement("div");
-  pointerEle.className = "wheel-pointer";
+  pointerEle = document.getElementById("wheel-pointer");
   pointerEle.style.width = `${POINTER_R * 2}px`;
   pointerEle.style.height = `${POINTER_R * 2}px`;
-  pointerEle.style.boxShadow = `inset ${-POINTER_R / 3}px ${-POINTER_R / 3}px ${
-    (POINTER_R * 2) / 3
-  }px  rgba(0,0,0,0.6), 1px 1px 5px #3e3e3e`;
-  containerEle.appendChild(pointerEle);
+
+  panelLightEle = document.getElementById("wheel-sel-light");
+  panelLightEle.style.width = `${SEL_LIGHT_R}px`;
+  panelLightEle.style.height = `${SEL_LIGHT_R}px`;
+  panelLightEle.style.display = "block";
 }
 
 function initArrow() {
-  arrowEle = document.createElement("div");
-  arrowEle.className = "wheel-arrow";
-  arrowEle.style.width = `${PANEL_R}px`;
-  arrowEle.style.height = `${PANEL_R}px`;
-  arrowEle.style.clipPath = `path("M ${ARROW_OFFSET} 0 A ${PANEL_R} ${PANEL_R}, 0, 0, 1, ${PANEL_R} ${
-    PANEL_R - ARROW_OFFSET
-  } L ${PANEL_R} 0 Z")`;
+  arrowEle = document.getElementById("wheel-arrow");
+  arrowEle.style.width = `${PANEL_R / 2}px`;
+  arrowEle.style.height = `${PANEL_R / 2}px`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${
+    CY - PANEL_R / 4 - ARROW_OFFSET
+  }px) rotate(${-45}deg)`;
   arrowEle.style.display = "none";
-
-  containerEle.appendChild(arrowEle);
 }
 
 function initWheelItems(items) {
@@ -261,7 +262,6 @@ function init(wheelItems) {
     containerEle = document.getElementById("wheel-container");
     canvasEle = document.querySelector("canvas.wheel-canvas");
 
-    // TODO remove listener?
     addKeyboardListener();
     addMouseListener();
     addResizeListener();

@@ -1,25 +1,22 @@
 body {
   margin: 0;
-  /* background-color: #222222; */
-  /* background: repeating-linear-gradient(
-      45deg,
-      #2b2b2b 0%,
-      #2b2b2b 10%,
-      #222222 0%,
-      #222222 50%
-    )
-    0 / 15px 15px; */
+  background-image: url("https://media.istockphoto.com/photos/young-woman-runner-tying-her-shoes-preparing-for-a-jog-outside-at-picture-id1298108434");
 }
 
 #wheel-container {
-  display: flex;
+  display: none;
   position: fixed;
   z-index: 9999;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
+  backdrop-filter: blur(3px) brightness(50%) grayscale(20%);
+}
+
+#wheel-container > div {
+  position: fixed;
 }
 
 canvas {
@@ -27,34 +24,10 @@ canvas {
   visibility: hidden;
 }
 
-/* Wheel Pointer */
-.wheel-pointer {
-  position: fixed;
-  background-color: #3e3e3e;
-  border-radius: 50%;
+#wheel-arrow > svg {
+  transform: rotate(-45deg);
 }
 
-/* Wheel Panel */
-.wheel-panel {
-  position: fixed;
-  border-radius: 50%;
-  box-shadow: inset 0 0 10px 4px rgba(0, 0, 0, 0.3);
-}
-
-.wheel-panel-light {
-  position: absolute;
-  border-radius: 50%;
-  box-shadow: 0 4px 0 rgba(0, 171, 242, 0.8) inset;
-}
-
-/* Wheel Arrow */
-.wheel-arrow {
-  position: fixed;
-  background-color: rgba(0, 171, 242);
-  transform-origin: bottom left;
-}
-
-/* Wheel Item */
 .wheel-item {
   position: fixed;
   width: 16em;
@@ -73,26 +46,26 @@ canvas {
   word-break: break-word;
   text-align: center;
 
-  font-size: 3em;
+  font-size: 2em;
   line-height: 1em;
-  color: #228dff;
-  font-family: Iceland;
+  color: #ffffff;
 
-  transition: all 0.5s;
+  transition: all 0.2s;
 }
 
 .wheel-item-text-selected {
+  font-size: 3em;
   color: #ffffff;
-  animation: neon2 1.5s ease-in-out infinite alternate;
+  animation: neon 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes neon2 {
+@keyframes neon {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
-      0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #008000,
+      0 0 70px #008000, 0 0 80px #008000, 0 0 90px #008000, 0 0 100px #008000;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff,
-      0 0 35px #228dff, 0 0 40px #228dff, 0 0 50px #228dff, 0 0 75px #228dff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #008000,
+      0 0 35px #008000, 0 0 40px #008000, 0 0 50px #008000, 0 0 75px #008000;
   }
 }
