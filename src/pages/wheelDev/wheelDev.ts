@@ -1,5 +1,4 @@
 import "./wheelDev.css";
-import pointerSvg from "./wheel-cursor.svg";
 
 const SEL_RANGE = 55;
 const POINTER_R = 30;
