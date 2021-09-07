@@ -1,9 +1,10 @@
 import "./wheelDev.css";
+import pointerSvg from "./wheel-cursor.svg";
 
-const SEL_RANGE = 50;
-const POINTER_R = 20;
-const PANEL_R = 80;
-const ARROW_OFFSET = 40;
+const SEL_RANGE = 55;
+const POINTER_R = 25;
+const PANEL_R = 120;
+const ARROW_OFFSET = 100;
 const ITEM_DIST = 200;
 
 let containerEle;
@@ -35,28 +36,28 @@ function reset() {
 
 function drawPanel() {
   panelEle.style.transform = `translate(${CX - PANEL_R}px, ${CY - PANEL_R}px)`;
-  if (sel) {
-    panelLightEle.style.transform = `rotate(${m_angle}deg)`;
-    panelLightEle.style.display = "block";
-  } else {
-    panelLightEle.style.display = "none";
-  }
+  // if (sel) {
+  //   panelLightEle.style.transform = `rotate(${m_angle}deg)`;
+  //   panelLightEle.style.display = "block";
+  // } else {
+  //   panelLightEle.style.display = "none";
+  // }
 }
 
 function drawPointer() {
-  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${
-    CY + my - POINTER_R
-  }px)`;
-  if (sel) pointerEle.style.opacity = "0.85";
-  else pointerEle.style.opacity = "0.5";
+  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${CY + my - POINTER_R}px)`;
+  // if (sel) pointerEle.style.opacity = "1.0";
+  // else pointerEle.style.opacity = "0.5";
 }
 
 function drawArrow() {
+  arrowEle.style.transformOrigin = `50% ${ARROW_OFFSET + PANEL_R / 4}px`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${CY - PANEL_R / 4 - ARROW_OFFSET}px) rotate(${sel_id * 45}deg)`;
+
   if (sel) {
-    arrowEle.style.transform = `rotate(-45deg)`;
-    arrowEle.style.transform = `translate(${CX}px, ${CY - PANEL_R}px) rotate(${
-      m_angle - 45
-    }deg) translate(${-5}px, ${5}px)`;
+    // arrowEle.style.transform = `translate(${CX}px, ${CY}px) rotate(${sel_id * 45}deg)`;
+    // arrowEle.style.transform = `translate(${CX}px, ${CY - PANEL_R}px) rotate(${m_angle - 45}deg) translate(${-5}px, ${5}px)`;
+    // arrowEle.style.transform = `translate(${CX}px, ${CY}px) rotate(${sel_id * 45}deg) translate(${0}px, ${-ARROW_OFFSET}px) `;
     arrowEle.style.display = "block";
   } else {
     arrowEle.style.display = "none";
@@ -75,8 +76,7 @@ function drawWheelItems() {
   });
 
   if (sel) {
-    wheelItemEles[sel_id].firstChild.className =
-      "wheel-item-text wheel-item-text-selected";
+    wheelItemEles[sel_id].firstChild.className = "wheel-item-text wheel-item-text-selected";
     wheelItemEles[sel_id].firstChild.style.fontSize = "4rem";
   }
 }
@@ -102,7 +102,7 @@ function updatePosition(e) {
   my += e.movementY;
   let mag = Math.sqrt(mx * mx + my * my);
 
-  const clamp = PANEL_R - POINTER_R;
+  const clamp = PANEL_R - POINTER_R * 2;
   if (mag > clamp) {
     mx *= clamp / mag;
     my *= clamp / mag;
@@ -126,7 +126,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.altKey && event.key === "z") {
+      if (event.altKey && event.key === "s") {
         containerEle.style.display = "flex";
         canvasEle.requestPointerLock();
       }
@@ -137,7 +137,7 @@ function addKeyboardListener() {
   document.addEventListener(
     "keyup",
     (event) => {
-      if (event.key === "Alt" || event.key === "z") {
+      if (event.key === "Alt" || event.key === "s") {
         document.exitPointerLock();
       }
     },
@@ -151,8 +151,7 @@ function addMouseListener() {
       document.addEventListener("mousemove", updatePosition, false);
     } else {
       if (sel) {
-        if (wheelItems[sel_id]?.url)
-          window.open(wheelItems[sel_id].url, "_blank");
+        if (wheelItems[sel_id]?.url) window.open(wheelItems[sel_id].url, "_blank");
       }
       document.removeEventListener("mousemove", updatePosition, false);
     }
@@ -168,53 +167,29 @@ function updateCenterPoint(WIDTH, HEIGHT) {
 
 function addResizeListener() {
   window.addEventListener("resize", (e) => {
-    updateCenterPoint(
-      (e.currentTarget as Window).innerWidth / 2,
-      (e.currentTarget as Window).innerHeight / 2
-    );
+    updateCenterPoint((e.currentTarget as Window).innerWidth / 2, (e.currentTarget as Window).innerHeight / 2);
   });
 }
 
 function initPanel() {
-  panelLightEle = document.createElement("div");
-  panelLightEle.className = "wheel-panel-light";
-  panelLightEle.style.width = `${PANEL_R * 2}px`;
-  panelLightEle.style.height = `${PANEL_R * 2}px`;
-  panelLightEle.style.display = "none";
-
-  panelEle = document.createElement("div");
-  panelEle.className = "wheel-panel";
+  panelEle = document.getElementById("wheel-panel");
   panelEle.style.width = `${PANEL_R * 2}px`;
   panelEle.style.height = `${PANEL_R * 2}px`;
   panelEle.style.transform = `translate(${CX - PANEL_R}px, ${CY - PANEL_R}px)`;
-  panelEle.appendChild(panelLightEle);
-
-  panelEle.appendChild(panelLightEle);
-  containerEle.appendChild(panelEle);
 }
 
 function initPointer() {
-  pointerEle = document.createElement("div");
-  pointerEle.className = "wheel-pointer";
+  pointerEle = document.getElementById("wheel-pointer");
   pointerEle.style.width = `${POINTER_R * 2}px`;
   pointerEle.style.height = `${POINTER_R * 2}px`;
-  pointerEle.style.boxShadow = `inset ${-POINTER_R / 3}px ${-POINTER_R / 3}px ${
-    (POINTER_R * 2) / 3
-  }px  rgba(0,0,0,0.6), 1px 1px 5px #3e3e3e`;
-  containerEle.appendChild(pointerEle);
 }
 
 function initArrow() {
-  arrowEle = document.createElement("div");
-  arrowEle.className = "wheel-arrow";
-  arrowEle.style.width = `${PANEL_R}px`;
-  arrowEle.style.height = `${PANEL_R}px`;
-  arrowEle.style.clipPath = `path("M ${ARROW_OFFSET} 0 A ${PANEL_R} ${PANEL_R}, 0, 0, 1, ${PANEL_R} ${
-    PANEL_R - ARROW_OFFSET
-  } L ${PANEL_R} 0 Z")`;
+  arrowEle = document.getElementById("wheel-arrow");
+  arrowEle.style.width = `${PANEL_R / 2}px`;
+  arrowEle.style.height = `${PANEL_R / 2}px`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${CY - PANEL_R / 4 - ARROW_OFFSET}px) rotate(${-45}deg)`;
   arrowEle.style.display = "none";
-
-  containerEle.appendChild(arrowEle);
 }
 
 function initWheelItems() {
@@ -265,6 +240,7 @@ function init() {
   initPointer();
   initArrow();
 
+  // TODO display until init finished.
   draw();
 }
 

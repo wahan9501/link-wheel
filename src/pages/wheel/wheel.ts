@@ -1,4 +1,5 @@
 import wheelHtml from "./wheel.html";
+import pointerImg from "./wheel-cursor.svg";
 
 const SEL_RANGE = 50;
 const POINTER_R = 20;
@@ -44,9 +45,7 @@ function drawPanel() {
 }
 
 function drawPointer() {
-  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${
-    CY + my - POINTER_R
-  }px)`;
+  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${CY + my - POINTER_R}px)`;
   if (sel) pointerEle.style.opacity = "0.85";
   else pointerEle.style.opacity = "0.5";
 }
@@ -54,9 +53,7 @@ function drawPointer() {
 function drawArrow() {
   if (sel) {
     arrowEle.style.transform = `rotate(-45deg)`;
-    arrowEle.style.transform = `translate(${CX}px, ${CY - PANEL_R}px) rotate(${
-      m_angle - 45
-    }deg) translate(${-5}px, ${5}px)`;
+    arrowEle.style.transform = `translate(${CX}px, ${CY - PANEL_R}px) rotate(${m_angle - 45}deg) translate(${-5}px, ${5}px)`;
     arrowEle.style.display = "block";
   } else {
     arrowEle.style.display = "none";
@@ -75,8 +72,7 @@ function drawWheelItems() {
   });
 
   if (sel) {
-    wheelItemEles[sel_id].firstChild.className =
-      "wheel-item-text wheel-item-text-selected";
+    wheelItemEles[sel_id].firstChild.className = "wheel-item-text wheel-item-text-selected";
     wheelItemEles[sel_id].firstChild.style.fontSize = "3rem";
   }
 }
@@ -156,8 +152,7 @@ function addMouseListener() {
       document.addEventListener("mousemove", updatePosition, false);
     } else {
       if (sel) {
-        if (wheelItems[sel_id]?.url)
-          window.open(wheelItems[sel_id].url, "_blank");
+        if (wheelItems[sel_id]?.url) window.open(wheelItems[sel_id].url, "_blank");
       }
       document.removeEventListener("mousemove", updatePosition, false);
     }
@@ -173,10 +168,7 @@ function updateCenterPoint(WIDTH, HEIGHT) {
 
 function addResizeListener() {
   window.addEventListener("resize", (e) => {
-    updateCenterPoint(
-      (e.currentTarget as Window).innerWidth / 2,
-      (e.currentTarget as Window).innerHeight / 2
-    );
+    updateCenterPoint((e.currentTarget as Window).innerWidth / 2, (e.currentTarget as Window).innerHeight / 2);
   });
 }
 
@@ -199,14 +191,18 @@ function initPanel() {
 }
 
 function initPointer() {
-  pointerEle = document.createElement("div");
-  pointerEle.className = "wheel-pointer";
-  pointerEle.style.width = `${POINTER_R * 2}px`;
-  pointerEle.style.height = `${POINTER_R * 2}px`;
-  pointerEle.style.boxShadow = `inset ${-POINTER_R / 3}px ${-POINTER_R / 3}px ${
-    (POINTER_R * 2) / 3
-  }px  rgba(0,0,0,0.6), 1px 1px 5px #3e3e3e`;
-  containerEle.appendChild(pointerEle);
+  var parser = new DOMParser();
+  pointerEle = parser.parseFromString(pointerImg, "image/svg+xml").documentElement;
+  console.log(">>", pointerEle);
+  // pointerEle.style.width = `${POINTER_R * 2}px`;
+  // pointerEle.style.height = `${POINTER_R * 2}px`;
+
+  // pointerEle = document.createElement("div");
+  // pointerEle.className = "wheel-pointer";
+  // pointerEle.style.width = `${POINTER_R * 2}px`;
+  // pointerEle.style.height = `${POINTER_R * 2}px`;
+  // pointerEle.style.boxShadow = `inset ${-POINTER_R / 3}px ${-POINTER_R / 3}px ${(POINTER_R * 2) / 3}px  rgba(0,0,0,0.6), 1px 1px 5px #3e3e3e`;
+  // containerEle.appendChild(pointerEle);
 }
 
 function initArrow() {
@@ -214,9 +210,7 @@ function initArrow() {
   arrowEle.className = "wheel-arrow";
   arrowEle.style.width = `${PANEL_R}px`;
   arrowEle.style.height = `${PANEL_R}px`;
-  arrowEle.style.clipPath = `path("M ${ARROW_OFFSET} 0 A ${PANEL_R} ${PANEL_R}, 0, 0, 1, ${PANEL_R} ${
-    PANEL_R - ARROW_OFFSET
-  } L ${PANEL_R} 0 Z")`;
+  arrowEle.style.clipPath = `path("M ${ARROW_OFFSET} 0 A ${PANEL_R} ${PANEL_R}, 0, 0, 1, ${PANEL_R} ${PANEL_R - ARROW_OFFSET} L ${PANEL_R} 0 Z")`;
   arrowEle.style.display = "none";
 
   containerEle.appendChild(arrowEle);
