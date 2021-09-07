@@ -1,42 +1,18 @@
 <style>
-  /* body {
-    margin: 0;
-    background-color: #222222;
-    background: repeating-linear-gradient(
-      45deg,
-      #2b2b2b 0%,
-      #2b2b2b 10%,
-      #222222 0%,
-      #222222 50%
-    )
-    0 / 15px 15px;
-  } */
-
-  /* body {
-    margin: 0;
-    background: url("https://blog.bitspawn.gg/wp-content/uploads/2020/04/dota2.jpg");
-    background-repeat: no-repeat;
-    background-size: 100vw 100vh;
-  } */
-
   #wheel-container {
     display: none;
     position: fixed;
     z-index: 9999;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
-    /* background-color: rgba(0, 0, 0, 0.4); */
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(43, 43, 43, 0.8) 0%,
-        rgba(43, 43, 43, 0.8) 10%,
-        rgba(34, 34, 34, 0.8) 0%,
-        rgba(34, 34, 34, 0.8) 50%
-      )
-      0 / 15px 15px;
+    backdrop-filter: blur(3px) brightness(50%) grayscale(20%);
+  }
+
+  #wheel-container > div {
+    position: fixed;
   }
 
   canvas {
@@ -44,37 +20,13 @@
     visibility: hidden;
   }
 
-  /* Wheel Pointer */
-  .wheel-pointer {
-    position: fixed;
-    background-color: #3e3e3e;
-    border-radius: 50%;
+  #wheel-arrow > svg {
+    transform: rotate(-45deg);
   }
 
-  /* Wheel Panel */
-  .wheel-panel {
-    position: fixed;
-    border-radius: 50%;
-    box-shadow: inset 0 0 10px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  .wheel-panel-light {
-    position: absolute;
-    border-radius: 50%;
-    box-shadow: 0 4px 0 rgba(0, 171, 242, 0.8) inset;
-  }
-
-  /* Wheel Arrow */
-  .wheel-arrow {
-    position: fixed;
-    background-color: rgba(0, 171, 242);
-    transform-origin: bottom left;
-  }
-
-  /* Wheel Item */
   .wheel-item {
     position: fixed;
-    width: 32em;
+    width: 16em;
   }
 
   .wheel-item-text {
@@ -90,31 +42,280 @@
     word-break: break-word;
     text-align: center;
 
-    /* font-size: 2em; */
+    font-size: 2em;
     line-height: 1em;
-    color: #228dff;
-    font-family: Iceland;
+    color: #ffffff;
 
-    transition: all 0.5s;
+    transition: all 0.2s;
   }
 
   .wheel-item-text-selected {
+    font-size: 3em;
     color: #ffffff;
-    animation: neon2 1.5s ease-in-out infinite alternate;
+    animation: neon 1.5s ease-in-out infinite alternate;
   }
 
-  @keyframes neon2 {
+  @keyframes neon {
     from {
-      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228dff,
-        0 0 70px #228dff, 0 0 80px #228dff, 0 0 100px #228dff, 0 0 150px #228dff;
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #008000,
+        0 0 70px #008000, 0 0 80px #008000, 0 0 90px #008000, 0 0 100px #008000;
     }
     to {
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff,
-        0 0 35px #228dff, 0 0 40px #228dff, 0 0 50px #228dff, 0 0 75px #228dff;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #008000,
+        0 0 35px #008000, 0 0 40px #008000, 0 0 50px #008000, 0 0 75px #008000;
     }
   }
 </style>
 
 <div id="wheel-container">
   <canvas class="wheel-canvas" width="0" height="0"></canvas>
+  <div id="wheel-panel">
+    <svg
+      version="1.1"
+      width="100%"
+      height="100%"
+      viewbox="-10 -10 120 120"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <mask id="panel-mask-ring" clipPathUnits="userSpaceOnUse">
+          <circle cx="50" cy="50" r="50" fill="white" />
+          <circle cx="50" cy="50" r="40" file="black" />
+        </mask>
+        <mask id="panel-mask-outer-ring" clipPathUnits="userSpaceOnUse">
+          <rect x="-10" y="-10" width="120" height="120" fill="white" />
+          <circle cx="50" cy="50" r="49.9" file="black" />
+        </mask>
+        <mask id="panel-mask-inner-ring" clipPathUnits="userSpaceOnUse">
+          <rect x="-10" y="-10" width="120" height="120" fill="white" />
+          <circle cx="50" cy="50" r="39.9" file="black" />
+        </mask>
+        <radialGradient id="panel-grad" cx="25%" cy="25%" r="100%">
+          <stop offset="0%" stop-color="#eee" stop-opacity="90%" />
+          <stop offset="50%" stop-color="#eee" stop-opacity="75%" />
+          <stop offset="90%" stop-color="#eee" stop-opacity="0%" />
+        </radialGradient>
+        <filter id="panel-filter-light" filterUnits="objectBoundingBox">
+          <feDropShadow dx="0" dy="0" stdDeviation="0.1" flood-color="white" />
+        </filter>
+        <filter id="panel-filter-outer-shadow" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="2" />
+          <feOffset dx="0" dy="6" result="offsetBlur" />
+        </filter>
+        <filter id="panel-filter-inner-shadow" filterUnits="objectBoundingBox">
+          <feOffset dx="0" dy="6" />
+          <feGaussianBlur stdDeviation="3" result="offsetBlur" />
+          <feComposite operator="out" in="SourceGraphic" result="inverse" />
+          <feFlood flood-color="black" flood-opacity="0.75" result="color" />
+          <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+          <feComponentTransfer in="shadow" result="shadow">
+            <feFuncA type="linear" slope="1.1" />
+          </feComponentTransfer>
+        </filter>
+      </defs>
+      <g id="panel">
+        <circle
+          cx="50"
+          cy="50"
+          r="50"
+          fill="url(#panel-grad)"
+          mask="url(#panel-mask-ring)"
+        />
+      </g>
+      <g id="outer-light" mask="url(#panel-mask-outer-ring)">
+        <circle
+          cx="50"
+          cy="49.5"
+          r="50"
+          fill="white"
+          fill-opacity="0.95"
+          filter="url(#panel-filter-light)"
+        />
+      </g>
+      <g id="outer-shadow" mask="url(#panel-mask-outer-ring)">
+        <circle
+          cx="50"
+          cy="50"
+          r="50"
+          fill="black"
+          fill-opacity="0.75"
+          filter="url(#panel-filter-outer-shadow)"
+        />
+      </g>
+      <g id="inner-light" mask="url(#panel-mask-inner-ring)">
+        <circle
+          cx="50"
+          cy="50.5"
+          r="40"
+          fill="white"
+          fill-opacity="0.95"
+          filter="url(#panel-filter-light)"
+        />
+      </g>
+      <g id="inner-shadow">
+        <circle
+          cx="50"
+          cy="50.5"
+          r="40"
+          fill="black"
+          filter="url(#panel-filter-inner-shadow)"
+        />
+      </g>
+    </svg>
+  </div>
+  <div id="wheel-pointer">
+    <svg
+      version="1.1"
+      width="100%"
+      height="100%"
+      viewbox="-10 -10 120 120"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="cursor-clip" clipPathUnits="userSpaceOnUse">
+          <circle cx="50" cy="50" r="50" />
+        </clipPath>
+        <mask id="cursor-mask" clipPathUnits="userSpaceOnUse">
+          <rect x="-10" y="-10" width="120" height="120" fill="white" />
+          <circle cx="50" cy="50" r="49.9" file="black" />
+        </mask>
+        <radialGradient id="cursor-grad-light">
+          <stop offset="0%" stop-color="#fff" stop-opacity="100%" />
+          <stop offset="100%" stop-color="#fff" stop-opacity="0%" />
+        </radialGradient>
+        <radialGradient id="cursor-grad-dark">
+          <stop offset="0%" stop-color="#000" stop-opacity="100%" />
+          <stop offset="100%" stop-color="#000" stop-opacity="0%" />
+        </radialGradient>
+        <filter id="cursor-filter-blur" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="10" />
+        </filter>
+        <filter id="cursor-filter-shadow-round" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+        </filter>
+        <filter id="cursor-filter-shadow-drop" filterUnits="objectBoundingBox">
+          <feOffset dx="0" dy="6" result="offsetBlur" />
+          <feGaussianBlur stdDeviation="3" />
+        </filter>
+      </defs>
+
+      <g
+        id="cursor"
+        clip-path="url(#cursor-clip)"
+        filter="url(#cursor-filter-blur)"
+      >
+        <circle cx="50" cy="50" r="50" fill="silver" fill-opacity="0.5" />
+        <ellipse
+          cx="50"
+          cy="0"
+          rx="200"
+          ry="45"
+          fill="url(#cursor-grad-light)"
+        />
+        <ellipse
+          cx="50"
+          cy="100"
+          rx="200"
+          ry="45"
+          fill="url(#cursor-grad-dark)"
+        />
+      </g>
+      <g id="cursor-shadow-round" mask="url(#cursor-mask)">
+        <circle
+          cx="50"
+          cy="50"
+          r="50"
+          fill="#444"
+          fill-opacity="0.75"
+          filter="url(#cursor-filter-shadow-round)"
+        />
+      </g>
+      <g id="cursor-shadow-drop" mask="url(#cursor-mask)">
+        <circle
+          cx="50"
+          cy="50"
+          r="52"
+          fill="#000"
+          fill-opacity="0.75"
+          filter="url(#cursor-filter-shadow-drop)"
+        />
+      </g>
+    </svg>
+  </div>
+  <div id="wheel-arrow">
+    <svg
+      version="1.1"
+      width="100%"
+      height="100%"
+      viewbox="-10 -10 70 70"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <path id="arrow-path" d="M 0 0 A 100 100, 0, 0, 1, 50 50 L 50 0 Z" />
+        <mask id="arrow-mask" clipPathUnits="userSpaceOnUse">
+          <rect x="-10" y="-10" width="120" height="120" fill="white" />
+          <use href="#arrow-path" fill="black" />
+        </mask>
+        <linearGradient id="arrow-grad">
+          <stop offset="0%" stop-color="white" />
+          <stop offset="33%" stop-color="white" stop-opacity="80%" />
+          <stop offset="66%" stop-color="white" stop-opacity="65%" />
+          <stop offset="100%" stop-color="white" stop-opacity="50%" />
+        </linearGradient>
+        <filter id="arrow-filter-shadow-round" filterUnits="objectBoundingBox">
+          <feOffset dx="-1" dy="-1" result="offsetBlur" />
+          <feGaussianBlur stdDeviation="2" />
+        </filter>
+        <filter id="arrow-filter-shadow" filterUnits="objectBoundingBox">
+          <feOffset dx="1" result="offsetBlur" />
+          <feGaussianBlur stdDeviation="1" />
+        </filter>
+      </defs>
+      <g id="arrow-shadow-round">
+        <use href="#arrow-path" fill="url(#arrow-grad)" />
+      </g>
+      <g id="arrow-shadow" mask="url(#arrow-mask)">
+        <use
+          href="#arrow-path"
+          fill="black"
+          fill-opacity="0.5"
+          filter="url(#arrow-filter-shadow)"
+        />
+      </g>
+    </svg>
+  </div>
+  <div id="wheel-sel-light">
+    <svg
+      version="1.1"
+      width="100%"
+      height="100%"
+      viewbox="-10 -10 120 120"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="sel-light-clip" clipPahtUnits="userSpaceOnUse">
+          <circle cx="50" cy="50" r="60" />
+        </clipPath>
+        <radialGradient id="sel-light-grad">
+          <stop offset="0%" stop-color="#fff" stop-opacity="100%" />
+          <stop offset="20%" stop-color="#fff" stop-opacity="80%" />
+          <stop offset="30%" stop-color="#fff" stop-opacity="30%" />
+          <stop offset="100%" stop-color="#fff" stop-opacity="0%" />
+        </radialGradient>
+        <filter id="light-filter" filterUnits="objectBoundingBox">
+          <feGaussianBlur stdDeviation="10" edgeMode="duplicate" />
+        </filter>
+      </defs>
+      <g id="arrow-shadow" clip-path="url(#sel-light-clip)">
+        <circle
+          cx="50"
+          cy="50"
+          r="50"
+          fill="url(#sel-light-grad)"
+          fill-opacity="0.9"
+          filter="url(#light-filter)"
+        />
+      </g>
+    </svg>
+  </div>
 </div>

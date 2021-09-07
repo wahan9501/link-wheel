@@ -141,7 +141,11 @@ function addKeyboardListener() {
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.altKey && event.key === "s") {
+      if (event.altKey && (event.key === "s" || event.key === "S")) {
+        if (containerEle.style.display === "none") {
+          reset();
+          draw();
+        }
         containerEle.style.display = "flex";
         canvasEle.requestPointerLock();
       }
@@ -152,7 +156,8 @@ function addKeyboardListener() {
   document.addEventListener(
     "keyup",
     (event) => {
-      if (event.key === "Alt" || event.key === "s") {
+      if (event.key === "Alt" || event.key === "s" || event.key === "S") {
+        containerEle.style.display = "none";
         document.exitPointerLock();
       }
     },
@@ -218,8 +223,8 @@ function initArrow() {
   arrowEle.style.display = "none";
 }
 
-function initWheelItems() {
-  wheelItems = new Array(8);
+function initWheelItems(items) {
+  wheelItems = items ?? new Array(8);
 
   for (let i = 0; i < 8; i++) {
     let wheelItemText = document.createElement("div");
@@ -251,7 +256,7 @@ function initWheelItems() {
   }
 }
 
-function init() {
+function init(wheelItems) {
   containerEle = document.getElementById("wheel-container");
   canvasEle = document.querySelector("canvas.wheel-canvas");
 
@@ -261,15 +266,14 @@ function init() {
 
   updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
 
-  initWheelItems();
+  initWheelItems(wheelItems);
   initPanel();
   initPointer();
   initArrow();
 
-  // Display until init finished.
-  containerEle.style.display = "flex";
-
   draw();
 }
 
-init();
+let items = new Array(8);
+items[0] = { title: "Google", url: "https://google.com" };
+init(items);

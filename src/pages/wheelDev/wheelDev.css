@@ -12,7 +12,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  backdrop-filter: blur(10px) brightness(50%) grayscale(20%);
+  backdrop-filter: blur(3px) brightness(50%) grayscale(20%);
 }
 
 #wheel-container > div {
