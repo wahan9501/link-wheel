@@ -267,7 +267,9 @@ function init() {
   initPointer();
   initArrow();
 
-  // TODO display until init finished.
+  // Display until init finished.
+  containerEle.style.display = "flex";
+
   draw();
 }
 
