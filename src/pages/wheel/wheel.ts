@@ -1,5 +1,4 @@
 import wheelHtml from "./wheel.html";
-import pointerImg from "./wheel-cursor.svg";
 
 const SEL_RANGE = 50;
 const POINTER_R = 20;
@@ -192,8 +191,9 @@ function initPanel() {
 
 function initPointer() {
   var parser = new DOMParser();
-  pointerEle = parser.parseFromString(pointerImg, "image/svg+xml").documentElement;
-  console.log(">>", pointerEle);
+  // pointerEle = parser.parseFromString(pointerImg, "image/svg+xml").documentElement;
+  // console.log(">>", pointerEle);
+
   // pointerEle.style.width = `${POINTER_R * 2}px`;
   // pointerEle.style.height = `${POINTER_R * 2}px`;
 
