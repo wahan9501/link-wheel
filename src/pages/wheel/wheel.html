@@ -8,7 +8,8 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    backdrop-filter: blur(3px) brightness(50%) grayscale(20%);
+    background-color: rgba(0, 0, 0, 0.3);
+    /* backdrop-filter: blur(3px) brightness(50%) grayscale(20%); */
   }
 
   #wheel-container > div {
@@ -57,12 +58,10 @@
 
   @keyframes neon {
     from {
-      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #008000,
-        0 0 70px #008000, 0 0 80px #008000, 0 0 90px #008000, 0 0 100px #008000;
+      text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #fff, 0 0 16px #abebc6, 0 0 28px #abebc6, 0 0 32px #abebc6, 0 0 40px #abebc6, 0 0 60px #abebc6;
     }
     to {
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #008000,
-        0 0 35px #008000, 0 0 40px #008000, 0 0 50px #008000, 0 0 75px #008000;
+      text-shadow: 0 0 12px #fff;
     }
   }
 </style>
@@ -70,13 +69,7 @@
 <div id="wheel-container">
   <canvas class="wheel-canvas" width="0" height="0"></canvas>
   <div id="wheel-panel">
-    <svg
-      version="1.1"
-      width="100%"
-      height="100%"
-      viewbox="-10 -10 120 120"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg version="1.1" width="100%" height="100%" viewbox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <mask id="panel-mask-ring" clipPathUnits="userSpaceOnUse">
           <circle cx="50" cy="50" r="50" fill="white" />
@@ -114,63 +107,24 @@
         </filter>
       </defs>
       <g id="panel">
-        <circle
-          cx="50"
-          cy="50"
-          r="50"
-          fill="url(#panel-grad)"
-          mask="url(#panel-mask-ring)"
-        />
+        <circle cx="50" cy="50" r="50" fill="url(#panel-grad)" mask="url(#panel-mask-ring)" />
       </g>
       <g id="outer-light" mask="url(#panel-mask-outer-ring)">
-        <circle
-          cx="50"
-          cy="49.5"
-          r="50"
-          fill="white"
-          fill-opacity="0.95"
-          filter="url(#panel-filter-light)"
-        />
+        <circle cx="50" cy="49.5" r="50" fill="white" fill-opacity="0.95" filter="url(#panel-filter-light)" />
       </g>
       <g id="outer-shadow" mask="url(#panel-mask-outer-ring)">
-        <circle
-          cx="50"
-          cy="50"
-          r="50"
-          fill="black"
-          fill-opacity="0.75"
-          filter="url(#panel-filter-outer-shadow)"
-        />
+        <circle cx="50" cy="50" r="50" fill="black" fill-opacity="0.75" filter="url(#panel-filter-outer-shadow)" />
       </g>
       <g id="inner-light" mask="url(#panel-mask-inner-ring)">
-        <circle
-          cx="50"
-          cy="50.5"
-          r="40"
-          fill="white"
-          fill-opacity="0.95"
-          filter="url(#panel-filter-light)"
-        />
+        <circle cx="50" cy="50.5" r="40" fill="white" fill-opacity="0.95" filter="url(#panel-filter-light)" />
       </g>
       <g id="inner-shadow">
-        <circle
-          cx="50"
-          cy="50.5"
-          r="40"
-          fill="black"
-          filter="url(#panel-filter-inner-shadow)"
-        />
+        <circle cx="50" cy="50.5" r="40" fill="black" filter="url(#panel-filter-inner-shadow)" />
       </g>
     </svg>
   </div>
   <div id="wheel-pointer">
-    <svg
-      version="1.1"
-      width="100%"
-      height="100%"
-      viewbox="-10 -10 120 120"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg version="1.1" width="100%" height="100%" viewbox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="cursor-clip" clipPathUnits="userSpaceOnUse">
           <circle cx="50" cy="50" r="50" />
@@ -199,57 +153,21 @@
         </filter>
       </defs>
 
-      <g
-        id="cursor"
-        clip-path="url(#cursor-clip)"
-        filter="url(#cursor-filter-blur)"
-      >
+      <g id="cursor" clip-path="url(#cursor-clip)" filter="url(#cursor-filter-blur)">
         <circle cx="50" cy="50" r="50" fill="silver" fill-opacity="0.5" />
-        <ellipse
-          cx="50"
-          cy="0"
-          rx="200"
-          ry="45"
-          fill="url(#cursor-grad-light)"
-        />
-        <ellipse
-          cx="50"
-          cy="100"
-          rx="200"
-          ry="45"
-          fill="url(#cursor-grad-dark)"
-        />
+        <ellipse cx="50" cy="0" rx="200" ry="45" fill="url(#cursor-grad-light)" />
+        <ellipse cx="50" cy="100" rx="200" ry="45" fill="url(#cursor-grad-dark)" />
       </g>
       <g id="cursor-shadow-round" mask="url(#cursor-mask)">
-        <circle
-          cx="50"
-          cy="50"
-          r="50"
-          fill="#444"
-          fill-opacity="0.75"
-          filter="url(#cursor-filter-shadow-round)"
-        />
+        <circle cx="50" cy="50" r="50" fill="#444" fill-opacity="0.75" filter="url(#cursor-filter-shadow-round)" />
       </g>
       <g id="cursor-shadow-drop" mask="url(#cursor-mask)">
-        <circle
-          cx="50"
-          cy="50"
-          r="52"
-          fill="#000"
-          fill-opacity="0.75"
-          filter="url(#cursor-filter-shadow-drop)"
-        />
+        <circle cx="50" cy="50" r="52" fill="#000" fill-opacity="0.75" filter="url(#cursor-filter-shadow-drop)" />
       </g>
     </svg>
   </div>
   <div id="wheel-arrow">
-    <svg
-      version="1.1"
-      width="100%"
-      height="100%"
-      viewbox="-10 -10 70 70"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg version="1.1" width="100%" height="100%" viewbox="-10 -10 70 70" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <path id="arrow-path" d="M 0 0 A 100 100, 0, 0, 1, 50 50 L 50 0 Z" />
         <mask id="arrow-mask" clipPathUnits="userSpaceOnUse">
@@ -275,23 +193,12 @@
         <use href="#arrow-path" fill="url(#arrow-grad)" />
       </g>
       <g id="arrow-shadow" mask="url(#arrow-mask)">
-        <use
-          href="#arrow-path"
-          fill="black"
-          fill-opacity="0.5"
-          filter="url(#arrow-filter-shadow)"
-        />
+        <use href="#arrow-path" fill="black" fill-opacity="0.5" filter="url(#arrow-filter-shadow)" />
       </g>
     </svg>
   </div>
   <div id="wheel-sel-light">
-    <svg
-      version="1.1"
-      width="100%"
-      height="100%"
-      viewbox="-10 -10 120 120"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg version="1.1" width="100%" height="100%" viewbox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="sel-light-clip" clipPahtUnits="userSpaceOnUse">
           <circle cx="50" cy="50" r="60" />
@@ -307,14 +214,7 @@
         </filter>
       </defs>
       <g id="arrow-shadow" clip-path="url(#sel-light-clip)">
-        <circle
-          cx="50"
-          cy="50"
-          r="50"
-          fill="url(#sel-light-grad)"
-          fill-opacity="0.9"
-          filter="url(#light-filter)"
-        />
+        <circle cx="50" cy="50" r="50" fill="url(#sel-light-grad)" fill-opacity="0.9" filter="url(#light-filter)" />
       </g>
     </svg>
   </div>
