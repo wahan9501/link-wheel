@@ -46,14 +46,9 @@ function init(items = new Array(8)) {
   for (let i = 0; i < 8; i++) {
     let line = document.createElement("div");
     line.className = "line";
-    let img = new DOMParser().parseFromString(
-      wheelSettingsLine,
-      "image/svg+xml"
-    ).documentElement;
+    let img = new DOMParser().parseFromString(wheelSettingsLine, "image/svg+xml").documentElement;
     line.appendChild(img);
-    line.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) translate(-200px, 0) rotate(${
-      i * 45
-    }deg)`;
+    line.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) translate(-200px, 0) rotate(${i * 45}deg)`;
     wheelSelector.appendChild(line);
   }
 
@@ -69,9 +64,7 @@ function init(items = new Array(8)) {
     item.className = "item";
     item.tabIndex = -1;
     item.id = `item-${id}`;
-    item.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) rotate(${
-      i * 45
-    }deg) translate(-380px, 0) rotate(${-i * 45}deg)`;
+    item.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) rotate(${i * 45}deg) translate(-380px, 0) rotate(${-i * 45}deg)`;
     item.onclick = (e) => {
       console.log(wheelEditor.querySelectorAll(".q-input>input"));
       if (id !== sel) {
@@ -80,10 +73,8 @@ function init(items = new Array(8)) {
         }
         sel = id;
         item.className = "item item-selected";
-        (document.getElementById("input-title") as any).value =
-          wheelItems[sel]?.title ?? "";
-        (document.getElementById("input-url") as any).value =
-          wheelItems[sel]?.url ?? "";
+        (document.getElementById("input-title") as any).value = wheelItems[sel]?.title ?? "";
+        (document.getElementById("input-url") as any).value = wheelItems[sel]?.url ?? "";
         wheelEditor.style.display = "block";
       }
       e.stopPropagation();

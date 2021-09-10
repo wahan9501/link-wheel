@@ -12,7 +12,8 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  backdrop-filter: blur(3px) brightness(50%) grayscale(20%);
+  background-color: rgba(0, 0, 0, 0.3);
+  /* backdrop-filter: blur(3px) brightness(50%) grayscale(20%); */
 }
 
 #wheel-container > div {
@@ -61,11 +62,10 @@ canvas {
 
 @keyframes neon {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #008000,
-      0 0 70px #008000, 0 0 80px #008000, 0 0 90px #008000, 0 0 100px #008000;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #008000, 0 0 70px #008000, 0 0 80px #008000, 0 0 90px #008000,
+      0 0 100px #008000;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #008000,
-      0 0 35px #008000, 0 0 40px #008000, 0 0 50px #008000, 0 0 75px #008000;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #008000, 0 0 35px #008000, 0 0 40px #008000, 0 0 50px #008000, 0 0 75px #008000;
   }
 }
