@@ -34,7 +34,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: "src/pages/wheel/wheel.html",
-      chunks: [],
+      chunks: ["wheel"],
       filename: "wheel.html",
     }),
     new HtmlWebpackPlugin({
