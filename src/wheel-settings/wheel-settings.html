@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wheel Canvas</title>
+  </head>
+  <body>
+    <div id="wheel-selector">
+      <div class="wheel">
+        <svg
+          version="1.1"
+          width="100%"
+          height="100%"
+          viewbox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+          display="none"
+        >
+          <rect x="15" y="15" width="70" height="70" fill="#59595a" />
+          <rect x="15" y="15" width="70" height="70" fill="#59595a" transform="rotate(45, 50, 50)" />
+          <circle cx="50" cy="50" r="39" fill="#1c1d20" />
+          <circle cx="50" cy="50" r="37" fill="#424243" />
+          <circle cx="50" cy="50" r="29" fill="#1c1d20" />
+          <circle cx="50" cy="50" r="37" fill="none" stroke="#49494a" stroke-width="1" />
+          <circle cx="50" cy="50" r="29" fill="none" stroke="#49494a" stroke-width="1" />
+        </svg>
+      </div>
+    </div>
+    <div id="wheel-editor">
+      <div class="q-label">Title:</div>
+      <div class="q-input">
+        <input type="text" id="input-title" />
+      </div>
+      <div class="q-label">Url:</div>
+      <div class="q-input">
+        <input type="text" id="input-url" />
+      </div>
+      <div id="save-btn" class="btn">Save</div>
+    </div>
+  </body>
+</html>
