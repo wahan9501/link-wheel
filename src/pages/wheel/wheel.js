@@ -1,4 +1,5 @@
-import "./wheelDev.css";
+import wheelHtml from "./wheel.html";
+import { STORAGE_KEY_WHEEL_ITEMS } from "../constants";
 
 const SEL_RANGE = 55;
 const POINTER_R = 30;
@@ -46,20 +47,12 @@ function drawPanel() {
 
 function drawPointer() {
   console.log(SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180)));
-  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${
-    CY + my - POINTER_R
-  }px)`;
+  pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${CY + my - POINTER_R}px)`;
   if (sel) {
     pointerEle.style.opacity = "1.0";
     panelLightEle.style.transform = `translate(${
-      CX -
-      SEL_LIGHT_R / 2 +
-      SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180))
-    }px, ${
-      CY -
-      SEL_LIGHT_R / 2 -
-      SEL_LIGHT_OFFSET * Math.cos(sel_id * 45 * (Math.PI / 180))
-    }px)`;
+      CX - SEL_LIGHT_R / 2 + SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180))
+    }px, ${CY - SEL_LIGHT_R / 2 - SEL_LIGHT_OFFSET * Math.cos(sel_id * 45 * (Math.PI / 180))}px)`;
     panelLightEle.style.display = "block";
   } else {
     pointerEle.style.opacity = "0.8";
@@ -69,9 +62,9 @@ function drawPointer() {
 
 function drawArrow() {
   arrowEle.style.transformOrigin = `50% ${ARROW_OFFSET + PANEL_R / 4}px`;
-  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${
-    CY - PANEL_R / 4 - ARROW_OFFSET
-  }px) rotate(${sel_id * 45}deg)`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${CY - PANEL_R / 4 - ARROW_OFFSET}px) rotate(${
+    sel_id * 45
+  }deg)`;
 
   if (sel) {
     arrowEle.style.display = "block";
@@ -91,8 +84,7 @@ function drawWheelItems() {
   });
 
   if (sel) {
-    wheelItemEles[sel_id].firstChild.className =
-      "wheel-item-text wheel-item-text-selected";
+    wheelItemEles[sel_id].firstChild.className = "wheel-item-text wheel-item-text-selected";
   }
 }
 
@@ -171,8 +163,7 @@ function addMouseListener() {
       document.addEventListener("mousemove", updatePosition, false);
     } else {
       if (sel) {
-        if (wheelItems[sel_id]?.url)
-          window.open(wheelItems[sel_id].url, "_blank");
+        if (wheelItems[sel_id]?.url) window.open(wheelItems[sel_id].url, "_blank");
       }
       document.removeEventListener("mousemove", updatePosition, false);
     }
@@ -188,10 +179,7 @@ function updateCenterPoint(WIDTH, HEIGHT) {
 
 function addResizeListener() {
   window.addEventListener("resize", (e) => {
-    updateCenterPoint(
-      (e.currentTarget as Window).innerWidth / 2,
-      (e.currentTarget as Window).innerHeight / 2
-    );
+    updateCenterPoint(e.currentTarget.innerWidth / 2, e.currentTarget.innerHeight / 2);
   });
 }
 
@@ -217,9 +205,7 @@ function initArrow() {
   arrowEle = document.getElementById("wheel-arrow");
   arrowEle.style.width = `${PANEL_R / 2}px`;
   arrowEle.style.height = `${PANEL_R / 2}px`;
-  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${
-    CY - PANEL_R / 4 - ARROW_OFFSET
-  }px) rotate(${-45}deg)`;
+  arrowEle.style.transform = `translate(${CX - PANEL_R / 4}px, ${CY - PANEL_R / 4 - ARROW_OFFSET}px) rotate(${-45}deg)`;
   arrowEle.style.display = "none";
 }
 
@@ -257,23 +243,33 @@ function initWheelItems(items) {
 }
 
 function init(wheelItems) {
-  containerEle = document.getElementById("wheel-container");
-  canvasEle = document.querySelector("canvas.wheel-canvas");
+  if (!document.getElementById("wheel-container")) {
+    document.body.insertAdjacentHTML("beforebegin", wheelHtml);
+    containerEle = document.getElementById("wheel-container");
+    canvasEle = document.querySelector("canvas.wheel-canvas");
 
-  addKeyboardListener();
-  addMouseListener();
-  addResizeListener();
+    addKeyboardListener();
+    addMouseListener();
+    addResizeListener();
 
-  updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
+    updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
 
-  initWheelItems(wheelItems);
-  initPanel();
-  initPointer();
-  initArrow();
+    initWheelItems(wheelItems);
+    initPanel();
+    initPointer();
+    initArrow();
 
-  draw();
+    draw();
+  }
 }
 
-let items = new Array(8);
-items[0] = { title: "Google", url: "https://google.com" };
-init(items);
+IStorage.get(STORAGE_KEY_WHEEL_ITEMS).then((result) => {
+  let items;
+  if (result && result[STORAGE_KEY_WHEEL_ITEMS]) {
+    items = result[STORAGE_KEY_WHEEL_ITEMS];
+  } else {
+    items = new Array(8);
+  }
+
+  init(items);
+});
