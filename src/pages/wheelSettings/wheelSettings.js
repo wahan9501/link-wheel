@@ -1,16 +1,5 @@
-import "./wheelSettings.css";
 import wheelSettingsLine from "./wheelSettingsLine.svg";
-
-function set(key, item): Promise<void> {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ key: item }, () => {
-      if (chrome.runtime.lastError) {
-        return reject(chrome.runtime.lastError);
-      }
-      resolve();
-    });
-  });
-}
+import "./wheelSettings.css";
 
 function validURL(str) {
   var pattern = new RegExp(
@@ -25,7 +14,6 @@ function validURL(str) {
   return !!pattern.test(str);
 }
 
-const key = "wheelItems";
 let wheelItems;
 let sel = -1;
 
@@ -46,14 +34,9 @@ function init(items = new Array(8)) {
   for (let i = 0; i < 8; i++) {
     let line = document.createElement("div");
     line.className = "line";
-    let img = new DOMParser().parseFromString(
-      wheelSettingsLine,
-      "image/svg+xml"
-    ).documentElement;
+    let img = new DOMParser().parseFromString(wheelSettingsLine, "image/svg+xml").documentElement;
     line.appendChild(img);
-    line.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) translate(-200px, 0) rotate(${
-      i * 45
-    }deg)`;
+    line.style.transform = `translate(-50%, -50%) translate(50vw, 50vh) translate(-200px, 0) rotate(${i * 45}deg)`;
     wheelSelector.appendChild(line);
   }
 
@@ -80,10 +63,8 @@ function init(items = new Array(8)) {
         }
         sel = id;
         item.className = "item item-selected";
-        (document.getElementById("input-title") as any).value =
-          wheelItems[sel]?.title ?? "";
-        (document.getElementById("input-url") as any).value =
-          wheelItems[sel]?.url ?? "";
+        document.getElementById("input-title").value = wheelItems[sel]?.title ?? "";
+        document.getElementById("input-url").value = wheelItems[sel]?.url ?? "";
         wheelEditor.style.display = "block";
       }
       e.stopPropagation();
@@ -96,21 +77,21 @@ function init(items = new Array(8)) {
   // Bind save button callback.
   const saveBtn = document.getElementById("save-btn");
   saveBtn.onclick = () => {
-    let title = (document.getElementById("input-title") as any).value;
-    let url = (document.getElementById("input-url") as any).value;
+    let title = document.getElementById("input-title").value;
+    let url = document.getElementById("input-url").value;
     if (!validURL(url)) {
       alert("Invalid url");
       return;
     }
 
     wheelItems[sel] = { title, url };
-    (document.querySelector(`#item-${sel} .text`) as any).innerText = title;
-    chrome.storage.local.set({ [key]: wheelItems }, () => {
+    document.querySelector(`#item-${sel} .text`).innerText = title;
+    IStorage.saveWheelItems(wheelItems).then(() => {
       alert("Saved!");
     });
   };
 }
 
-chrome.storage.local.get(key, function (result) {
-  init(result[key]);
+IStorage.getWheelItems().then((items) => {
+  init(items);
 });

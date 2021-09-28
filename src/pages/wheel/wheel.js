@@ -46,7 +46,6 @@ function drawPanel() {
 }
 
 function drawPointer() {
-  console.log(SEL_LIGHT_OFFSET * Math.sin(sel_id * 45 * (Math.PI / 180)));
   pointerEle.style.transform = `translate(${CX + mx - POINTER_R}px, ${CY + my - POINTER_R}px)`;
   if (sel) {
     pointerEle.style.opacity = "1.0";
@@ -263,13 +262,6 @@ function init(wheelItems) {
   }
 }
 
-IStorage.get(STORAGE_KEY_WHEEL_ITEMS).then((result) => {
-  let items;
-  if (result && result[STORAGE_KEY_WHEEL_ITEMS]) {
-    items = result[STORAGE_KEY_WHEEL_ITEMS];
-  } else {
-    items = new Array(8);
-  }
-
+IStorage.getWheelItems().then((items) => {
   init(items);
 });
