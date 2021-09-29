@@ -26,13 +26,5 @@
         "<all_urls>"
       ]
     }
-  ],
-  "commands": {
-    "openWheel": {
-      "suggested_key": {
-        "default": "Alt+S"
-      },
-      "description": "Dota2 chat wheel like wheel for open quick access links"
-    }
-  }
+  ]
 }

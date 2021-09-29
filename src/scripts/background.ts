@@ -276,32 +276,31 @@ function injectWheelIframe() {
         // iframeEle.onfocus = () => console.log("focused");
         // iframeEle.onblur = () => console.log("lose focused");
 
-        // document.addEventListener(
-        //   "keydown",
-        //   (event) => {
-        //     console.log("toptop >> key down");
-        //     if (event.altKey && event.key === "s") {
-        //       console.log(">> ", iframeEle.style.display);
-        //       // if (iframeEle.style.display === "none" || !iframeEle.style.display) {
-        //       iframeEle.style.display = "flex";
-        //       iframeEle.focus();
-        //       // }
-        //     }
-        //   },
-        //   true
-        // );
+        document.addEventListener(
+          "keydown",
+          (event) => {
+            if (event.altKey && event.key === "z") {
+              console.log(">> ", iframeEle.style.display);
+              if (iframeEle.style.display === "none" || !iframeEle.style.display) {
+                iframeEle.style.display = "flex";
+                iframeEle.focus();
+              }
+            }
+          },
+          true
+        );
 
-        document.addEventListener("keyup", (event) => {
-          if (event.key === "Alt" || event.key === "s") {
-            console.log("top >> key up");
-            // if (iframeEle.style.display === "flex") {
-            iframeEle.style.display = "none";
-            // iframeEle.focus();
-            // }
-          }
-        });
+        // document.addEventListener("keyup", (event) => {
+        //   if (event.key === "Alt" || event.key === "z") {
+        //     console.log("top >> key up");
+        //     // if (iframeEle.style.display === "flex") {
+        //     iframeEle.style.display = "none";
+        //     // iframeEle.focus();
+        //     // }
+        //   }
+        // });
 
-        document.addEventListener("message", (event) => {
+        window.addEventListener("message", (event) => {
           if ((event as MessageEvent).data === "exit") {
             console.log("top >> key up");
             iframeEle.style.display = "none";
@@ -310,52 +309,34 @@ function injectWheelIframe() {
         });
       }
 
-      const iframeEle = document.getElementById("wheel-iframe") as HTMLIFrameElement;
-      iframeEle.style.display = "flex";
-      iframeEle.focus();
+      // const iframeEle = document.getElementById("wheel-iframe") as HTMLIFrameElement;
+      // iframeEle.style.display = "flex";
+      // iframeEle.contentWindow.focus();
       // iframeEle.contentWindow.disp(new KeyboardEvent("keydown", { key: "s", altKey: true }));
-      iframeEle.contentWindow.postMessage("start", "*");
+      // iframeEle.contentWindow.postMessage("start", "*");
 
       // document.body.insertAdjacentHTML("beforebegin", html);
     });
 }
 
-// chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-//   //code in here will run every time a user goes onto a new tab, so you can insert your scripts into every new tab
-//   // tab.
-//   // reddenPage();
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  //code in here will run every time a user goes onto a new tab, so you can insert your scripts into every new tab
+  // tab.
+  // reddenPage();
 
-//   // console.log(JSON.stringify(changeInfo));
-//   if (changeInfo.status === "loading") {
-//     chrome.scripting.executeScript({
-//       target: { tabId: tab.id },
-//       func: injectWheelIframe,
-//       // func: reddenPage,
-//     });
+  // console.log(JSON.stringify(changeInfo));
+  if (changeInfo.status === "loading") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: injectWheelIframe,
+      // func: reddenPage,
+    });
 
-//     // chrome.scripting.executeScript({
-//     //   target: { tabId: tab.id },
-//     //   file: "wheel.js",
-//     // });
-//   }
-// });
+    // chrome.scripting.executeScript({
+    //   target: { tabId: tab.id },
+    //   file: "wheel.js",
+    // });
+  }
+});
 
 // chrome://flags/#extensions-on-chrome-urls
-
-chrome.commands.onCommand.addListener((command) => {
-  // command will be "flip-tabs-forward" or "flip-tabs-backwards"
-
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    // Sort tabs according to their index in the window.
-
-    if (command === "openWheel") {
-      console.log("command recv");
-      const activeTab = tabs[0];
-      chrome.scripting.executeScript({
-        target: { tabId: activeTab.id },
-        func: injectWheelIframe,
-        // func: reddenPage,
-      });
-    }
-  });
-});

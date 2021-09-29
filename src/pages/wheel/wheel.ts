@@ -42,28 +42,49 @@ window.onload = () => {
   }
 
   function setupKeyboardListener() {
-    document.addEventListener("message", (event) => {
-      console.log("iframe recv message");
-      // if (event.altKey && event.key === "s") {
-      if ((event as MessageEvent).data === "start") {
-        reset();
-        draw();
-
-        canvas.requestPointerLock();
+    // window.top.addEventListener("keydown", () => {
+    //   console.log("Listener from iframe");
+    // });
+    window.addEventListener("keydown", (event) => {
+      // console.log("iframe >> key down");
+      if (event.altKey && event.key === "z") {
+        if (container.style.display === "none" || !container.style.display) {
+          container.style.display = "flex";
+          canvas.requestPointerLock();
+          console.log("iframe >> key down");
+          reset();
+          draw();
+        }
       }
     });
+
+    document.addEventListener("keyup", (event) => {
+      if (event.key === "Alt" || event.key === "z") {
+        container.style.display = "none";
+        console.log("iframe >> key up");
+        window.parent.postMessage("exit", "*");
+        window.parent.window.focus();
+      }
+    });
+    // document.addEventListener("message", (event) => {
+    //   console.log("iframe recv message");
+    //   // if (event.altKey && event.key === "s") {
+    //   if ((event as MessageEvent).data === "start") {
+    //     reset();
+    //     draw();
+    //     canvas.requestPointerLock();
+    //   }
+    // });
     // window.onfocus = () => {
     //   console.log("wheel.html on focus");
-
     //   reset();
     //   draw();
-
-    //   canvas.requestPointerLock();
+    //   // canvas.requestPointerLock();
     // };
-    window.onblur = () => {
-      console.log("wheel.html on blur");
-      document.exitPointerLock();
-    };
+    // window.onblur = () => {
+    //   console.log("wheel.html on blur");
+    //   document.exitPointerLock();
+    // };
   }
 
   function drawWheel() {
@@ -229,16 +250,3 @@ window.onload = () => {
 
   console.log("wheel.html loaded");
 };
-// document.addEventListener("keydown", (event) => {
-//   if (event.altKey && event.key === "s") {
-//     console.log("iframe >> key down");
-//   }
-// });
-
-// document.addEventListener("keyup", (event) => {
-//   if (event.key === "Alt" || event.key === "s") {
-//     console.log("iframe >> key up");
-//     window.parent.postMessage("exit", "*");
-//     window.parent.window.focus();
-//   }
-// });
