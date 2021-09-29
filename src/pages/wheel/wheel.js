@@ -1,6 +1,3 @@
-import wheelHtml from "./wheel.html";
-import { STORAGE_KEY_WHEEL_ITEMS } from "../constants";
-
 const SEL_RANGE = 55;
 const POINTER_R = 30;
 const PANEL_R = 120;
@@ -10,7 +7,6 @@ const SEL_LIGHT_R = 100;
 const SEL_LIGHT_OFFSET = 80;
 
 let containerEle;
-let canvasEle;
 let pointerEle;
 let panelEle;
 let panelLightEle;
@@ -94,7 +90,7 @@ function draw() {
   drawWheelItems();
 }
 
-function update() {
+function render() {
   if (!animation) {
     animation = requestAnimationFrame(function () {
       animation = null;
@@ -125,55 +121,28 @@ function updatePosition(e) {
     sel = false;
   }
 
-  update();
+  render();
 }
 
-function addKeyboardListener() {
-  document.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.altKey && (event.key === "s" || event.key === "S")) {
-        if (containerEle.style.display === "none") {
-          reset();
-          draw();
-        }
-        containerEle.style.display = "flex";
-        canvasEle.requestPointerLock();
-      }
-    },
-    true
-  );
-
-  document.addEventListener(
-    "keyup",
-    (event) => {
-      if (event.key === "Alt" || event.key === "s" || event.key === "S") {
-        containerEle.style.display = "none";
-        document.exitPointerLock();
-      }
-    },
-    true
-  );
-}
-
-function addMouseListener() {
-  function lockChangeAlert() {
-    if (document.pointerLockElement === canvasEle) {
-      document.addEventListener("mousemove", updatePosition, false);
-    } else {
+function setupEventListener() {
+  window.addEventListener("message", (event) => {
+    if (event.data.type === "mousemove") {
+      updatePosition(event.data);
+    } else if (event.data.type === "exit") {
       if (sel) {
-        if (wheelItems[sel_id]?.url) window.open(wheelItems[sel_id].url, "_blank");
+        if (wheelItems[sel_id]?.url) {
+          window.parent.postMessage({ type: "openurl", url: wheelItems[sel_id].url }, "*");
+        }
+        reset();
       }
-      document.removeEventListener("mousemove", updatePosition, false);
     }
-  }
-  document.addEventListener("pointerlockchange", lockChangeAlert, false);
+  });
 }
 
 function updateCenterPoint(WIDTH, HEIGHT) {
   CX = WIDTH;
   CY = HEIGHT;
-  update();
+  render();
 }
 
 function addResizeListener() {
@@ -242,24 +211,19 @@ function initWheelItems(items) {
 }
 
 function init(wheelItems) {
-  if (!document.getElementById("wheel-container")) {
-    document.body.insertAdjacentHTML("beforebegin", wheelHtml);
-    containerEle = document.getElementById("wheel-container");
-    canvasEle = document.querySelector("canvas.wheel-canvas");
+  containerEle = document.getElementById("wheel-container");
 
-    addKeyboardListener();
-    addMouseListener();
-    addResizeListener();
+  setupEventListener();
+  addResizeListener();
 
-    updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
+  updateCenterPoint(window.innerWidth / 2, window.innerHeight / 2);
 
-    initWheelItems(wheelItems);
-    initPanel();
-    initPointer();
-    initArrow();
+  initWheelItems(wheelItems);
+  initPanel();
+  initPointer();
+  initArrow();
 
-    draw();
-  }
+  render();
 }
 
 IStorage.getWheelItems().then((items) => {

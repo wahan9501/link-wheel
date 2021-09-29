@@ -7,13 +7,15 @@ function copyManifest() {
 }
 
 function buildWheel() {
-  return esbuild.build({
+  esbuild.buildSync({
     entryPoints: ["src/pages/wheel/wheel.js"],
     bundle: true,
     inject: ["src/pages/storage/chromeStorage.js"],
     loader: { ".html": "text" },
     outdir: "dist",
   });
+
+  return gulp.src("src/pages/wheel/wheel.html").pipe(gulp.dest("dist/"));
 }
 
 function buildWheelDev() {
