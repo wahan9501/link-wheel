@@ -19,12 +19,10 @@ let sel = -1;
 
 function init(items = new Array(8)) {
   wheelItems = items;
-  console.log(wheelItems);
 
   const wheelSelector = document.getElementById("wheel-selector");
   const wheelEditor = document.getElementById("wheel-editor");
   wheelSelector.onclick = () => {
-    console.log("board");
     if (sel !== -1) document.getElementById(`item-${sel}`).className = "item";
     wheelEditor.style.display = "none";
     sel = -1;
@@ -56,7 +54,6 @@ function init(items = new Array(8)) {
       i * 45
     }deg) translate(-380px, 0) rotate(${-i * 45}deg)`;
     item.onclick = (e) => {
-      console.log(wheelEditor.querySelectorAll(".q-input>input"));
       if (id !== sel) {
         if (sel !== -1) {
           document.getElementById(`item-${sel}`).className = "item";
@@ -88,6 +85,19 @@ function init(items = new Array(8)) {
     document.querySelector(`#item-${sel} .text`).innerText = title;
     IStorage.saveWheelItems(wheelItems).then(() => {
       alert("Saved!");
+    });
+  };
+
+  // Bind clear button callback.
+  const clearBtn = document.getElementById("clear-btn");
+  clearBtn.onclick = () => {
+    wheelItems[sel] = null;
+    document.querySelector(`#item-${sel} .text`).innerText = "N/A";
+    document.getElementById("input-title").value = "";
+    document.getElementById("input-url").value = "";
+
+    IStorage.saveWheelItems(wheelItems).then(() => {
+      alert("Cleared!");
     });
   };
 }
