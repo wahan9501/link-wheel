@@ -31,6 +31,12 @@ if (!document.getElementById("wheel-iframe")) {
   addMouseListener();
 }
 
+// Allow hotkey in INPUT SELECT TEXTAREA elements.
+// REF: https://github.com/jaywcjlove/hotkeys#filter
+hotkeys.filter = function (event) {
+  return true;
+};
+
 hotkeys("alt+s", function (event, handler) {
   if (event.type === "keydown") {
     const iframeEle = document.getElementById("wheel-iframe");
