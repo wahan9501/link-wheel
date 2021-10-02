@@ -54,11 +54,20 @@ function buildWheelSettingsDev() {
   return gulp.src("src/pages/wheelSettings/wheelSettings.html").pipe(gulp.dest("dist/"));
 }
 
-function buildScripts() {
-  return esbuild.build({
+function buildScripts(cb) {
+  const buildBackgroundScript = esbuild.buildSync({
     entryPoints: ["src/scripts/background.js"],
     outdir: "dist",
   });
+
+  const buildInjectWheelScript = esbuild.buildSync({
+    entryPoints: ["src/scripts/injectWheel.js"],
+    loader: { ".html": "text" },
+    bundle: true,
+    outdir: "dist",
+  });
+
+  return Promise.all([buildBackgroundScript, buildInjectWheelScript]);
 }
 
 const build = gulp.parallel(buildScripts, copyManifest, buildWheel, buildWheelSettings);

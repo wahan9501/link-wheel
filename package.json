@@ -13,5 +13,8 @@
     "watch": "yarn gulp watch",
     "start:wheel": "yarn gulp start:wheel",
     "start:wheelSettings": "yarn gulp start:wheelSettings"
+  },
+  "dependencies": {
+    "hotkeys-js": "^3.8.7"
   }
 }

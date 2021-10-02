@@ -11,9 +11,7 @@ let pointerEle;
 let panelEle;
 let panelLightEle;
 let arrowEle;
-
-var animation;
-
+let animation;
 let wheelItems;
 let CX = 0;
 let CY = 0;
@@ -133,8 +131,8 @@ function setupEventListener() {
         if (wheelItems[sel_id]?.url) {
           window.parent.postMessage({ type: "openurl", url: wheelItems[sel_id].url }, "*");
         }
-        reset();
       }
+      reset();
     }
   });
 }
