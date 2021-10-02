@@ -100,6 +100,8 @@ function init(items = new Array(8)) {
       alert("Cleared!");
     });
   };
+
+  wheelSelector.style.display = "block";
 }
 
 IStorage.getWheelItems().then((items) => {
