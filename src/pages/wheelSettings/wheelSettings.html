@@ -3,61 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <title>Wheel Canvas</title>
-    <style>
-      body {
-        margin: 0;
-        background: url("https://blog.bitspawn.gg/wp-content/uploads/2020/04/dota2.jpg");
-        background-repeat: no-repeat;
-        background-size: 100vw 100vh;
-      }
-
-      svg {
-        margin-top: 600px;
-        margin-left: 300px;
-      }
-    </style>
   </head>
-  <body>
-    <!-- <svg version="1.1" width="300" height="300" viewbox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg"> -->
-    <svg version="1.1" width="50" height="50" viewbox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <clipPath id="cursor-clip" clipPathUnits="userSpaceOnUse">
-          <circle cx="50" cy="50" r="50" />
-        </clipPath>
-        <mask id="cursor-mask" clipPathUnits="userSpaceOnUse">
-          <rect x="-10" y="-10" width="120" height="120" fill="white" />
-          <circle cx="50" cy="50" r="49.9" file="black" />
-        </mask>
-        <radialGradient id="cursor-light">
-          <stop offset="0%" stop-color="#fff" stop-opacity="100%" />
-          <stop offset="100%" stop-color="#fff" stop-opacity="0%" />
-        </radialGradient>
-        <radialGradient id="cursor-dark">
-          <stop offset="0%" stop-color="#000" stop-opacity="100%" />
-          <stop offset="100%" stop-color="#000" stop-opacity="0%" />
-        </radialGradient>
-        <filter id="cursor-filter" filterUnits="objectBoundingBox">
-          <feGaussianBlur stdDeviation="10" />
-        </filter>
-        <filter id="cursor-shadow-filter" filterUnits="objectBoundingBox">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-        </filter>
-        <filter id="cursor-shadow-filter2" filterUnits="objectBoundingBox">
-          <feGaussianBlur stdDeviation="3" />
-          <feOffset dx="-2" dy="7" result="offsetBlur" />
-        </filter>
-      </defs>
-
-      <g id="cursor" clip-path="url(#cursor-clip)" filter="url(#cursor-filter)">
-        <ellipse cx="50" cy="0" rx="200" ry="45" fill="url(#cursor-light)" />
-        <ellipse cx="50" cy="100" rx="200" ry="45" fill="url(#cursor-dark)" />
-      </g>
-      <g id="cursor-shadow" mask="url(#cursor-mask)">
-        <circle cx="50" cy="50" r="50" fill="#444" fill-opacity="0.75" filter="url(#cursor-shadow-filter)" />
-      </g>
-      <g id="cursor-shadow2" mask="url(#cursor-mask)">
-        <circle cx="50" cy="50" r="50" fill="#000" fill-opacity="0.75" filter="url(#cursor-shadow-filter2)" />
-      </g>
-    </svg>
+  <body style="background-color: #1c1d20">
+    <div id="wheel-selector" style="display: none">
+      <div class="wheel">
+        <svg version="1.1" width="100%" height="100%" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="15" width="70" height="70" fill="#59595a" />
+          <rect x="15" y="15" width="70" height="70" fill="#59595a" transform="rotate(45, 50, 50)" />
+          <circle cx="50" cy="50" r="39" fill="#1c1d20" />
+          <circle cx="50" cy="50" r="37" fill="#424243" />
+          <circle cx="50" cy="50" r="29" fill="#1c1d20" />
+          <circle cx="50" cy="50" r="37" fill="none" stroke="#49494a" stroke-width="1" />
+          <circle cx="50" cy="50" r="29" fill="none" stroke="#49494a" stroke-width="1" />
+        </svg>
+      </div>
+    </div>
+    <div id="wheel-editor" style="display: none">
+      <div class="q-label">Title:</div>
+      <div class="q-input">
+        <input type="text" id="input-title" />
+      </div>
+      <div class="q-label">Url:</div>
+      <div class="q-input">
+        <input type="text" id="input-url" />
+      </div>
+      <div id="save-btn" class="btn">Save</div>
+      <div id="clear-btn" class="btn">Clear</div>
+    </div>
+    <script src="./wheelSettings.js"></script>
+    <link rel="stylesheet" href="./wheelSettings.css" />
   </body>
 </html>
