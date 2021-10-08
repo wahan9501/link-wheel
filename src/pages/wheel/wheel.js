@@ -19,6 +19,7 @@ let mx = 0;
 let my = 0;
 let m_angle = 0;
 let sel = false;
+let pre_sel = false;
 let sel_id = -1;
 let wheelItemEles = [];
 
@@ -27,6 +28,7 @@ function reset() {
   mx = 0;
   my = 0;
   sel = false;
+  pre_sel = false;
   sel_id = -1;
 }
 
@@ -73,12 +75,37 @@ function drawWheelItems() {
     let y = CY - ITEM_DIST * Math.cos(angle);
     e.style.transform = `translate(${x}px, ${y}px)`;
 
-    e.firstChild.className = "wheel-item-text";
-  });
+    // const clsList = e.firstChild.firstChild.classList;
+    // if (sel && sel_id === i) {
+    //   if (!clsList.contains("wheel-item-text-selected")) {
+    //     clsList.add("wheel-item-text-selected");
+    //   }
+    // } else {
+    //   if (clsList.contains("wheel-item-text-selected")) {
+    //     clsList.remove("wheel-item-text-selected");
+    //   }
+    // }
 
-  if (sel) {
-    wheelItemEles[sel_id].firstChild.className = "wheel-item-text wheel-item-text-selected";
-  }
+    if (sel && sel_id === i) {
+      if (!e.firstChild.classList.contains("wheel-item-text-selected")) {
+        e.firstChild.classList.add("wheel-item-text-selected");
+      }
+      const trans = e.firstChild.firstChild.style.transform.split(" ");
+      if (!trans[trans.length - 1].startsWith("scale")) {
+        trans.push("scale(1.2)");
+        e.firstChild.firstChild.style.transform = trans.join(" ");
+      }
+    } else {
+      if (e.firstChild.classList.contains("wheel-item-text-selected")) {
+        e.firstChild.classList.remove("wheel-item-text-selected");
+      }
+      const trans = e.firstChild.firstChild.style.transform.split(" ");
+      if (trans[trans.length - 1].startsWith("scale")) {
+        trans.pop();
+        e.firstChild.firstChild.style.transform = trans.join(" ");
+      }
+    }
+  });
 }
 
 function draw() {
@@ -180,28 +207,66 @@ function initWheelItems(items) {
 
   for (let i = 0; i < 8; i++) {
     let wheelItemText = document.createElement("div");
-    wheelItemText.className = "wheel-item-text";
+    wheelItemText.className = "wheel-item-text wheel-item-text-" + i;
     wheelItemText.innerText = wheelItems[i]?.title ?? "N/A";
+
+    let wheelItemTextContainer = document.createElement("div");
+    wheelItemTextContainer.className = "wheel-item-text-container";
+    wheelItemTextContainer.append(wheelItemText);
 
     let wheelItem = document.createElement("div");
     wheelItem.className = "wheel-item";
-    wheelItem.append(wheelItemText);
+    wheelItem.append(wheelItemTextContainer);
 
     const angle = (45 * i * Math.PI) / 180;
     let x = CX + ITEM_DIST * Math.sin(angle);
     let y = CY - ITEM_DIST * Math.cos(angle);
     wheelItem.style.transform = `translate(${x}px, ${y}px)`;
 
-    if (i === 0 || i === 4) {
+    if (i === 0) {
       wheelItemText.style.textAlign = "center";
+      wheelItemText.style.transformOrigin = "bottom";
       wheelItemText.style.transform = "translate(-50%, -50%)";
-    } else if (i > 0 && i < 4) {
+    } else if (i === 1) {
       wheelItemText.style.textAlign = "left";
-      wheelItemText.style.transform = "translate(0%, -50%) translateX(-2em)";
-    } else if (i > 4 && i < 8) {
+      wheelItemText.style.transformOrigin = "left bottom";
+      wheelItemText.style.transform = "translate(0%, -50%) translateX(-1rem)";
+    } else if (i === 2) {
+      wheelItemText.style.textAlign = "left";
+      wheelItemText.style.transformOrigin = "left";
+      wheelItemText.style.transform = "translate(0%, -50%) translateX(-1rem)";
+    } else if (i === 3) {
+      wheelItemText.style.textAlign = "left";
+      wheelItemText.style.transformOrigin = "left top";
+      wheelItemText.style.transform = "translate(0%, -50%) translateX(-1rem)";
+    } else if (i === 4) {
+      wheelItemText.style.textAlign = "center";
+      wheelItemText.style.transformOrigin = "top";
+      wheelItemText.style.transform = "translate(-50%, -50%)";
+    } else if (i === 5) {
       wheelItemText.style.textAlign = "right";
-      wheelItemText.style.transform = "translate(-100%, -50%) translateX(2em)";
+      wheelItemText.style.transformOrigin = "right top";
+      wheelItemText.style.transform = "translate(-100%, -50%) translateX(1rem)";
+    } else if (i === 6) {
+      wheelItemText.style.textAlign = "right";
+      wheelItemText.style.transformOrigin = "right";
+      wheelItemText.style.transform = "translate(-100%, -50%) translateX(1rem)";
+    } else if (i === 7) {
+      wheelItemText.style.textAlign = "right";
+      wheelItemText.style.transformOrigin = "right bottom";
+      wheelItemText.style.transform = "translate(-100%, -50%) translateX(1rem)";
     }
+
+    // if (i === 0 || i === 4) {
+    //   wheelItemText.style.textAlign = "center";
+    //   wheelItemText.style.transform = "translate(-50%, -50%)";
+    // } else if (i > 0 && i < 4) {
+    //   wheelItemText.style.textAlign = "left";
+    //   wheelItemText.style.transform = "translate(0%, -50%) translateX(-2rem)";
+    // } else if (i > 4 && i < 8) {
+    //   wheelItemText.style.textAlign = "right";
+    //   wheelItemText.style.transform = "translate(-100%, -50%) translateX(2rem)";
+    // }
 
     wheelItemEles.push(wheelItem);
     containerEle.append(wheelItem);

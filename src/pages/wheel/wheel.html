@@ -32,7 +32,60 @@
 
       .wheel-item {
         position: absolute;
-        width: 24em;
+        width: 24rem;
+      }
+
+      /* .wheel-item-text-0 {
+        text-align: center;
+        transform-origin: bottom;
+        transform: translate(-50%, -50%);
+      }
+
+      .wheel-item-text-1 {
+        text-align: left;
+        transform-origin: left bottom;
+        transform: translate(0%, -50%) translateX(-1.5rem);
+      }
+
+      .wheel-item-text-2 {
+        text-align: left;
+        transform-origin: left;
+        transform: translate(0%, -50%) translateX(-1.5rem);
+      }
+
+      .wheel-item-text-3 {
+        text-align: left;
+        transform-origin: left top;
+        transform: translate(0%, -50%) translateX(-1.5rem);
+      }
+
+      .wheel-item-text-4 {
+        text-align: center;
+        transform-origin: top;
+        transform: translate(-50%, -50%);
+      }
+
+      .wheel-item-text-5 {
+        text-align: right;
+        transform-origin: right top;
+        transform: translate(-100%, -50%) translateX(1.5rem);
+      }
+
+      .wheel-item-text-6 {
+        text-align: right;
+        transform-origin: right;
+        transform: translate(-100%, -50%) translateX(1.5rem);
+      }
+
+      .wheel-item-text-7 {
+        text-align: right;
+        transform-origin: right bottom;
+        transform: translate(-100%, -50%) translateX(1.5rem);
+      } */
+
+      .wheel-item-text-container {
+        /* padding: 1rem; */
+        position: relative;
       }
 
       .wheel-item-text {
@@ -44,19 +97,22 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
 
-        padding: 1em;
         word-break: break-word;
         text-align: center;
 
-        font-size: 2em;
-        line-height: 1em;
+        font-size: 2rem;
+        /* line-height: 1em; */
         color: #ffffff;
 
-        transition: font-size 0.2s;
+        max-height: 4.4rem;
+        padding: 1.5rem;
+        transition: transform 0.2s;
+        /* transition: font-size 0.2s; */
       }
 
       .wheel-item-text-selected {
-        font-size: 3em;
+        /* font-size: 3rem; */
+        /* transform: scale(1.2); */
         animation: neon 1.5s ease-in-out infinite alternate;
       }
 
@@ -223,6 +279,11 @@
           </g>
         </svg>
       </div>
+      <!-- <div class="wheel-item">
+        <div class="wheel-item-text-container">
+          <div class="wheel-item-text-0"></div>
+        </div>
+      </div> -->
     </div>
     <script src="./wheel.js"></script>
   </body>

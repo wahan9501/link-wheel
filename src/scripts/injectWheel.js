@@ -50,7 +50,7 @@ hotkeys("alt+s", function (event, handler) {
 hotkeys("*", { keydown: false, keyup: true }, function (event, handler) {
   const iframeEle = document.getElementById("wheel-iframe");
   if (iframeEle) {
-    iframeEle.style.display = "none";
+    // iframeEle.style.display = "none";
     document.exitPointerLock();
   }
 });
