@@ -6,7 +6,8 @@
   "devDependencies": {
     "del": "^6.0.0",
     "esbuild": "^0.13.2",
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-zip": "^5.1.0"
   },
   "scripts": {
     "build": "yarn gulp build",

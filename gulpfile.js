@@ -1,6 +1,7 @@
 const gulp = require("gulp");
 const esbuild = require("esbuild");
 var del = require("del");
+const zip = require("gulp-zip");
 
 function copyManifest() {
   return gulp.src("src/assets/manifest.json").pipe(gulp.dest("dist/"));
@@ -72,6 +73,8 @@ function buildScripts(cb) {
 
 const build = gulp.parallel(buildScripts, copyManifest, buildWheel, buildWheelSettings);
 
+const pack = gulp.series(build, () => gulp.src("dist/*").pipe(zip("link-wheel.zip")).pipe(gulp.dest("output/")));
+
 function watch() {
   clean();
   gulp.watch(["src/**/*"], { ignoreInitial: false }, build);
@@ -104,4 +107,5 @@ exports["start:wheelSettings"] = watchWheelSettingsDev;
 
 exports.watch = watch;
 exports.build = build;
+exports.pack = pack;
 exports.default = build;
