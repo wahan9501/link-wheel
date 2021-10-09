@@ -28,6 +28,8 @@ function reset() {
   my = 0;
   sel = false;
   sel_id = -1;
+
+  render();
 }
 
 function drawPanel() {
@@ -73,12 +75,31 @@ function drawWheelItems() {
     let y = CY - ITEM_DIST * Math.cos(angle);
     e.style.transform = `translate(${x}px, ${y}px)`;
 
-    e.firstChild.className = "wheel-item-text";
-  });
+    if (i === 0) {
+      e.firstChild.style.transform = `translate(-50%, -50%)`;
+    } else if (i === 1) {
+      e.firstChild.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 2) {
+      e.firstChild.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 3) {
+      e.firstChild.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 4) {
+      e.firstChild.style.transform = `translate(-50%, -50%)`;
+    } else if (i === 5) {
+      e.firstChild.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
+    } else if (i === 6) {
+      e.firstChild.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
+    } else if (i === 7) {
+      e.firstChild.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
+    }
 
-  if (sel) {
-    wheelItemEles[sel_id].firstChild.className = "wheel-item-text wheel-item-text-selected";
-  }
+    if (sel && sel_id === i) {
+      e.firstChild.className = "wheel-item-text wheel-item-text-selected";
+      e.firstChild.style.transform += " scale(1.2)";
+    } else {
+      e.firstChild.className = "wheel-item-text";
+    }
+  });
 }
 
 function draw() {
@@ -192,15 +213,38 @@ function initWheelItems(items) {
     let y = CY - ITEM_DIST * Math.cos(angle);
     wheelItem.style.transform = `translate(${x}px, ${y}px)`;
 
-    if (i === 0 || i === 4) {
+    if (i === 0) {
       wheelItemText.style.textAlign = "center";
-      wheelItemText.style.transform = "translate(-50%, -50%)";
-    } else if (i > 0 && i < 4) {
+      wheelItemText.style.transformOrigin = "bottom";
+      wheelItemText.style.transform = `translate(-50%, -50%)`;
+    } else if (i === 1) {
       wheelItemText.style.textAlign = "left";
-      wheelItemText.style.transform = "translate(0%, -50%) translateX(-2em)";
-    } else if (i > 4 && i < 8) {
+      wheelItemText.style.transformOrigin = "left bottom";
+      wheelItemText.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 2) {
+      wheelItemText.style.textAlign = "left";
+      wheelItemText.style.transformOrigin = "left";
+      wheelItemText.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 3) {
+      wheelItemText.style.textAlign = "left";
+      wheelItemText.style.transformOrigin = "left top";
+      wheelItemText.style.transform = `translate(0%, -50%) translateX(-2.5rem)`;
+    } else if (i === 4) {
+      wheelItemText.style.textAlign = "center";
+      wheelItemText.style.transformOrigin = "top";
+      wheelItemText.style.transform = `translate(-50%, -50%)`;
+    } else if (i === 5) {
       wheelItemText.style.textAlign = "right";
-      wheelItemText.style.transform = "translate(-100%, -50%) translateX(2em)";
+      wheelItemText.style.transformOrigin = "right top";
+      wheelItemText.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
+    } else if (i === 6) {
+      wheelItemText.style.textAlign = "right";
+      wheelItemText.style.transformOrigin = "right";
+      wheelItemText.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
+    } else if (i === 7) {
+      wheelItemText.style.textAlign = "right";
+      wheelItemText.style.transformOrigin = "right bottom";
+      wheelItemText.style.transform = `translate(-100%, -50%) translateX(2.5rem)`;
     }
 
     wheelItemEles.push(wheelItem);

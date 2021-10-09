@@ -32,42 +32,39 @@
 
       .wheel-item {
         position: absolute;
-        width: 16em;
+        width: 24rem;
       }
 
       .wheel-item-text {
-        text-decoration: none;
-
         display: -webkit-box;
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
 
-        padding: 1em;
+        padding: 1rem;
+        max-height: 4.8rem;
+
         word-break: break-word;
         text-align: center;
-
-        font-size: 2em;
-        line-height: 1em;
+        text-decoration: none;
+        font-size: 2rem;
         color: #ffffff;
 
-        transition: all 0.2s;
+        transition: transform 0.2s;
       }
 
       .wheel-item-text-selected {
-        font-size: 3em;
-        color: #ffffff;
         animation: neon 1.5s ease-in-out infinite alternate;
       }
 
       @keyframes neon {
         from {
-          text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #fff, 0 0 16px #abebc6, 0 0 28px #abebc6, 0 0 32px #abebc6,
-            0 0 40px #abebc6, 0 0 60px #abebc6;
+          text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #abebc6, 0 0 14px #abebc6, 0 0 16px #abebc6,
+            0 0 18px #abebc6, 0 0 20px #abebc6;
         }
         to {
-          text-shadow: 0 0 12px #fff;
+          text-shadow: 0 0 9px #fff;
         }
       }
     </style>
