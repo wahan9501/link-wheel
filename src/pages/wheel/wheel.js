@@ -28,6 +28,8 @@ function reset() {
   my = 0;
   sel = false;
   sel_id = -1;
+
+  render();
 }
 
 function drawPanel() {
